@@ -1,0 +1,313 @@
+{
+  "name": "Jasper",
+  "race": "Dwarf",
+  "class": "Fighter",
+  "subclass": "Battle Master",
+  "level": 5,
+  "hitDie": {
+    "number": 1,
+    "faces": 10
+  },
+  "maxHitDice": 5,
+  "currentHitDice": 5,
+  "background": "",
+  "abilityScores": {
+    "strength": 14,
+    "dexterity": 13,
+    "constitution": 19,
+    "intelligence": 17,
+    "wisdom": 12,
+    "charisma": 16
+  },
+  "skills": {
+    "acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "animalHandling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "history": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "sleightOfHand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "survival": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Animal Handling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "History": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Sleight of Hand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Survival": {
+      "proficient": false,
+      "bonus": 0
+    }
+  },
+  "feats": [],
+  "inventory": [
+    {
+      "name": "Greataxe",
+      "type": "weapon",
+      "damage": "1d12",
+      "damageType": "slashing",
+      "properties": [
+        "Heavy",
+        "Two-handed"
+      ],
+      "cost": "30 gp",
+      "weight": "7 lb.",
+      "width": 1,
+      "height": 3
+    },
+    {
+      "name": "Scale mail",
+      "type": "armor",
+      "armorType": "Medium",
+      "ac": 14,
+      "addDex": true,
+      "maxDex": 2,
+      "stealthDisadvantage": true,
+      "cost": "50 gp",
+      "weight": "45 lb.",
+      "width": 2,
+      "height": 3
+    },
+    {
+      "name": "Backpack",
+      "type": "gear",
+      "cost": "2 gp",
+      "weight": "5 lb.",
+      "width": 2,
+      "height": 2
+    },
+    {
+      "name": "Bedroll",
+      "type": "gear",
+      "cost": "1 gp",
+      "weight": "7 lb.",
+      "width": 2,
+      "height": 1
+    },
+    {
+      "name": "Rations",
+      "type": "gear",
+      "cost": "5 sp",
+      "weight": "2 lb.",
+      "width": 1,
+      "height": 1
+    },
+    {
+      "name": "Torch",
+      "type": "gear",
+      "cost": "1 cp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 2
+    },
+    {
+      "name": "Tinderbox",
+      "type": "gear",
+      "cost": "5 sp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "spells": [],
+  "hp": 54,
+  "maxHp": 54,
+  "ac": 11,
+  "initiative": 1,
+  "proficiencyBonus": 3,
+  "savingThrows": {
+    "strength": {
+      "value": 0,
+      "proficient": false
+    },
+    "dexterity": {
+      "value": 0,
+      "proficient": false
+    },
+    "constitution": {
+      "value": 0,
+      "proficient": false
+    },
+    "intelligence": {
+      "value": 0,
+      "proficient": false
+    },
+    "wisdom": {
+      "value": 0,
+      "proficient": false
+    },
+    "charisma": {
+      "value": 0,
+      "proficient": false
+    }
+  },
+  "notes": "",
+  "currency": {
+    "copper": 0,
+    "silver": 30,
+    "electrum": 2,
+    "gold": 0,
+    "platinum": 0,
+    "gems": ""
+  },
+  "abilityScoreImprovementsLeft": 0,
+  "speed": 25,
+  "experiencePoints": 0,
+  "languages": [],
+  "traits": [],
+  "spellcasting": {
+    "class": "",
+    "ability": "",
+    "spellSaveDC": 0,
+    "spellAttackBonus": 0,
+    "spells": [],
+    "spellSlots": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    },
+    "currentSpellSlots": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    }
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "name": "Bree",
+  "race": "Human",
+  "class": "Cleric",
+  "subclass": "Life Domain",
+  "level": 5,
+  "hitDie": {
+    "number": 1,
+    "faces": 8
+  },
+  "maxHitDice": 5,
+  "currentHitDice": 5,
+  "background": "",
+  "abilityScores": {
+    "strength": 14,
+    "dexterity": 18,
+    "constitution": 18,
+    "intelligence": 19,
+    "wisdom": 12,
+    "charisma": 18
+  },
+  "skills": {
+    "acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "animalHandling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "history": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "sleightOfHand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "survival": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Animal Handling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "History": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Sleight of Hand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Survival": {
+      "proficient": false,
+      "bonus": 0
+    }
+  },
+  "feats": [],
+  "inventory": [
+    {
+      "name": "Maul",
+      "type": "weapon",
+      "damage": "2d6",
+      "damageType": "bludgeoning",
+      "properties": [
+        "Heavy",
+        "Two-handed"
+      ],
+      "cost": "10 gp",
+      "weight": "10 lb.",
+      "width": 1,
+      "height": 2
+    },
+    {
+      "name": "Chain shirt",
+      "type": "armor",
+      "armorType": "Medium",
+      "ac": 13,
+      "addDex": true,
+      "maxDex": 2,
+      "stealthDisadvantage": false,
+      "cost": "50 gp",
+      "weight": "20 lb.",
+      "width": 2,
+      "height": 3
+    },
+    {
+      "name": "Backpack",
+      "type": "gear",
+      "cost": "2 gp",
+      "weight": "5 lb.",
+      "width": 2,
+      "height": 2
+    },
+    {
+      "name": "Bedroll",
+      "type": "gear",
+      "cost": "1 gp",
+      "weight": "7 lb.",
+      "width": 2,
+      "height": 1
+    },
+    {
+      "name": "Torch",
+      "type": "gear",
+      "cost": "1 cp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 2
+    },
+    {
+      "name": "Rations",
+      "type": "gear",
+      "cost": "5 sp",
+      "weight": "2 lb.",
+      "width": 1,
+      "height": 1
+    },
+    {
+      "name": "Rope hemp",
+      "type": "gear",
+      "cost": "1 gp",
+      "weight": "10 lb.",
+      "width": 2,
+      "height": 2
+    }
+  ],
+  "spells": [],
+  "hp": 48,
+  "maxHp": 48,
+  "ac": 14,
+  "initiative": 4,
+  "proficiencyBonus": 3,
+  "savingThrows": {
+    "strength": {
+      "value": 0,
+      "proficient": false
+    },
+    "dexterity": {
+      "value": 0,
+      "proficient": false
+    },
+    "constitution": {
+      "value": 0,
+      "proficient": false
+    },
+    "intelligence": {
+      "value": 0,
+      "proficient": false
+    },
+    "wisdom": {
+      "value": 0,
+      "proficient": false
+    },
+    "charisma": {
+      "value": 0,
+      "proficient": false
+    }
+  },
+  "notes": "",
+  "currency": {
+    "copper": 0,
+    "silver": 0,
+    "electrum": 10,
+    "gold": 0,
+    "platinum": 0,
+    "gems": ""
+  },
+  "abilityScoreImprovementsLeft": 0,
+  "speed": 30,
+  "experiencePoints": 0,
+  "languages": [],
+  "traits": [],
+  "spellcasting": {
+    "class": "",
+    "ability": "",
+    "spellSaveDC": 0,
+    "spellAttackBonus": 0,
+    "spells": [
+      "Guidance",
+      "Light",
+      "Sacred Flame",
+      "Spare the Dying",
+      "Word of Radiance",
+      "Cure Wounds",
+      "Detect Evil and Good",
+      "Guiding Bolt",
+      "Healing Word",
+      "Aid",
+      "Continual Flame",
+      "Lesser Restoration",
+      "Spiritual Weapon",
+      "Daylight",
+      "Beacon of Hope"
+    ],
+    "spellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    },
+    "currentSpellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    }
+  }
+}

@@ -1,0 +1,15 @@
+[
+    { "name": "Padded", "type": "armor", "armorType": "Light", "ac": 11, "addDex": true, "stealthDisadvantage": true, "cost": "5 gp", "weight": "8 lb." , "width": 2, "height": 3},
+    { "name": "Leather", "type": "armor", "armorType": "Light", "ac": 11, "addDex": true, "stealthDisadvantage": false, "cost": "10 gp", "weight": "10 lb." , "width": 2, "height": 3 },
+    { "name": "Studded leather", "type": "armor", "armorType": "Light", "ac": 12, "addDex": true, "stealthDisadvantage": false, "cost": "45 gp", "weight": "13 lb." , "width": 2, "height": 3 },
+    { "name": "Hide", "type": "armor", "armorType": "Medium", "ac": 12, "addDex": true, "maxDex": 2, "stealthDisadvantage": false, "cost": "10 gp", "weight": "12 lb." , "width": 2, "height": 3 },
+    { "name": "Chain shirt", "type": "armor", "armorType": "Medium", "ac": 13, "addDex": true, "maxDex": 2, "stealthDisadvantage": false, "cost": "50 gp", "weight": "20 lb." , "width": 2, "height": 3 },
+    { "name": "Scale mail", "type": "armor", "armorType": "Medium", "ac": 14, "addDex": true, "maxDex": 2, "stealthDisadvantage": true, "cost": "50 gp", "weight": "45 lb." , "width": 2, "height": 3 },
+    { "name": "Breastplate", "type": "armor", "armorType": "Medium", "ac": 14, "addDex": true, "maxDex": 2, "stealthDisadvantage": false, "cost": "400 gp", "weight": "20 lb." , "width": 2, "height": 3 },
+    { "name": "Half plate", "type": "armor", "armorType": "Medium", "ac": 15, "addDex": true, "maxDex": 2, "stealthDisadvantage": true, "cost": "750 gp", "weight": "40 lb." , "width": 2, "height": 3 },
+    { "name": "Ring mail", "type": "armor", "armorType": "Heavy", "ac": 14, "addDex": false, "stealthDisadvantage": true, "cost": "30 gp", "weight": "40 lb." , "width": 2, "height": 3 },
+    { "name": "Chain mail", "type": "armor", "armorType": "Heavy", "ac": 16, "addDex": false, "stealthDisadvantage": true, "strengthRequirement": 13, "cost": "75 gp", "weight": "55 lb." , "width": 2, "height": 3 },
+    { "name": "Splint", "type": "armor", "armorType": "Heavy", "ac": 17, "addDex": false, "stealthDisadvantage": true, "strengthRequirement": 15, "cost": "200 gp", "weight": "60 lb." , "width": 2, "height": 3 },
+    { "name": "Plate", "type": "armor", "armorType": "Heavy", "ac": 18, "addDex": false, "stealthDisadvantage": true, "strengthRequirement": 15, "cost": "1,500 gp", "weight": "65 lb." , "width": 2, "height": 3 },
+    { "name": "Shield", "type": "armor", "armorType": "Shield", "ac": 2, "addDex": false, "stealthDisadvantage": false, "cost": "10 gp", "weight": "6 lb." , "width": 2, "height": 3 }
+    ]

@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;D 5e Character Viewer</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #4a3728;
+      margin: 0;
+      padding: 20px;
+      background-image: url('dark-leather-texture.jpg');
+      background-repeat: repeat;
+      background-size: 500px 500px;
+      color: #f0f0f0;
+    }
+  
+    #fileInput {
+      display: none;
+    }
+  
+    #openFileButton,
+    #deleteButton {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+  
+    #deleteButton {
+      background-color: #f44336;
+    }
+  
+    #characterStack {
+      position: relative;
+      height: 600px;
+      width: 420px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+    }
+  
+    .character-card {
+      background-color: rgba(255, 255, 255, 0.7);
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      width: 400px;
+      transition: all 0.3s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  
+    .character-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5;
+      z-index: -1;
+      border-radius: inherit;
+    }
+  
+    .character-card > * {
+      position: relative;
+      z-index: 1;
+    }
+  
+    .character-card h2,
+    .character-card p,
+    .character-card button,
+    .character-card .attribute,
+    .character-card .skill,
+    .character-card .spell-item {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 5px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+  
+    .character-card h2 {
+      color: #1a1a1a;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+  
+    .character-card.stacked {
+      height: 55px;
+      overflow: hidden;
+    }
+  
+    .character-card.active {
+      z-index: 100;
+      height: auto;
+    }
+  
+    .close-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(255, 0, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      /* opacity: 0.5; */
+    }
+  
+    .close-button:hover {
+      background-color: rgba(255, 0, 0, 0.9);
+    }
+  
+    .attributes, .skills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .attribute, .skill {
+      text-align: center;
+      width: 30%;
+      margin-bottom: 10px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  
+    .view-buttons {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  
+    .view-buttons button {
+      background-color: rgba(255, 255, 255, 0.3);
+      color: #1a1a1a;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 5px 10px;
+      font-size: 12px;
+      margin: 2px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  
+    .view-buttons button.active {
+      background-color: rgba(0, 140, 186, 0.7);
+      color: white;
+    }
+  
+    .hp-controls {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px;
+    }
+  
+    .hp-controls input {
+      width: 40px;
+      text-align: center;
+      margin: 0 5px;
+    }
+  
+    .initiative-button, .long-rest-button, .short-rest-button, .add-item-button, .hp-controls button, .cast-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      margin: 2px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  
+    .initiative-button {
+      background-color: #FFA500;
+    }
+  
+    .skills-container {
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 10px;
+      width: calc(100% - 20px);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+    }
+  
+    .spell-slots {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+  
+    .spell-slot {
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 3px 6px;
+      border-radius: 3px;
+      margin: 2px;
+      display: inline-block;
+    }
+  
+    .spell-item {
+      background-color: rgba(249, 249, 249, 0.8);
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      overflow: hidden;
+    }
+  
+    .spell-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      background-color: rgba(233, 233, 233, 0.8);
+      cursor: pointer;
+    }
+  
+    .spell-content {
+      padding: 10px;
+      display: none;
+    }
+  
+    .log-box {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 20px;
+      height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+  
+    .log-entry {
+      background-color: rgba(255, 255, 255, 0.3);
+      color: #2a2a2a;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 3px;
+    }
+  
+    #notificationArea {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(51, 51, 51, 0.9);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+  
+    .inventory {
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+    }
+  
+    .inventory h3 {
+      color: #ddd;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  
+    .inventory-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  
+    .weapon-item, .armor-item, .other-item {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .inventory-item strong,
+    .inventory-item span,
+    .inventory-item button {
+      color: #1a1a1a;
+    }
+  
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+  
+    .list-layout {
+      display: block;
+    }
+  
+    .total-weight {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #ddd;
+      text-align: right;
+    }
+  
+    @media (max-width: 600px) {
+      .inventory-item {
+        font-size: 14px;
+      }
+  
+      .inventory-item button {
+        padding: 3px 6px;
+        font-size: 0.8em;
+      }
+    }
+
+    .hp-controls button {
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+
+  .character-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+
+  .action-button {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .add-item-button {
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    height: auto;
+    max-height: 300px;
+  }
+
+  .skill {
+    width: 100%;
+  }
+
+  .add-item-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow-y: auto;
+  }
+
+  .weapons-list,
+  .armor-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: #ff0000;
+    opacity: 1;
+  }
+
+    /* Add this rule to set all text to black */
+    .character-card,
+  .character-card *:not(button) {
+    color: black;
+  }
+
+  /* Update these rules to ensure good contrast */
+  .view-buttons button,
+  .initiative-button,
+  .long-rest-button,
+  .short-rest-button,
+  .add-item-button,
+  .hp-controls button,
+  .cast-button,
+  .close-button {
+    color: white;
+  }
+
+  /* Ensure the notification area and log box have appropriate text color */
+  #notificationArea,
+  .log-box,
+  .log-entry {
+    color: white;
+  }
+
+  .initiative-button,
+  .long-rest-button,
+  .short-rest-button,
+  .add-item-button,
+  .view-buttons button {
+    color: black;
+    font-weight: bold;
+  }
+
+  .modal-content {
+    background-color: #f0f0f0;
+    color: black;
+  }
+
+  .modal-content button {
+    color: black;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+  }
+
+  .modal-content button:hover {
+    background-color: #d0d0d0;
+  }
+
+  .attributes button,
+  .skills button {
+    color: black;
+  }
+
+  .inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .inventory-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .inventory {
+    max-height: none;
+    overflow-y: visible;
+  }
+  .dice-roll-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  .dice-roll-button:hover {
+    background-color: #45a049;
+  }
+
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .skill {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px;
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .skill-name {
+    font-weight: bold;
+  }
+
+  .skill-attribute {
+    font-style: italic;
+    font-size: 0.9em;
+  }
+
+  .skill button {
+    width: 100%;
+    margin-top: 5px;
+  }
+  #loadPremadeButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  #loadPremadeButton:hover {
+    background-color: #45a049;
+  }
+
+  .main-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .main-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .main-button:hover {
+    background-color: #45a049;
+  }
+
+  #deleteButton {
+    background-color: #f44336;
+  }
+
+  #deleteButton:hover {
+    background-color: #d32f2f;
+  }
+
+  #fileInput {
+    display: none;
+  }
+  </style>
+</head>
+
+<body>
+  <input type="file" id="fileInput" accept=".json">
+  <button id="openFileButton" class="main-button" >Open Character File</button>
+  <button id="deleteButton" class="main-button" >Delete Character</button>
+  <button id="loadPremadeButton" class="main-button" onclick="loadPremadeCharacters()">Load Premade Characters</button>
+  <div id="characterStack"></div>
+  <div id="notificationArea"></div>
+  <script>
+    (function() {
+      let GG_ALL_GAME_CONFIG = {
+        attributeAbbreviations: ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'],
+        notificationDuration: 3000,
+        skillList: ['Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History', 'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception', 'Performance', 'Persuasion', 'Religion', 'Sleight of Hand', 'Stealth', 'Survival'],
+        attributeFullNames: {
+          'STR': 'strength',
+          'DEX': 'dexterity',
+          'CON': 'constitution',
+          'INT': 'intelligence',
+          'WIS': 'wisdom',
+          'CHA': 'charisma'
+        },
+        skillToAttributeMap: {
+          'Acrobatics': 'DEX',
+          'Animal Handling': 'WIS',
+          'Arcana': 'INT',
+          'Athletics': 'STR',
+          'Deception': 'CHA',
+          'History': 'INT',
+          'Insight': 'WIS',
+          'Intimidation': 'CHA',
+          'Investigation': 'INT',
+          'Medicine': 'WIS',
+          'Nature': 'INT',
+          'Perception': 'WIS',
+          'Performance': 'CHA',
+          'Persuasion': 'CHA',
+          'Religion': 'INT',
+          'Sleight of Hand': 'DEX',
+          'Stealth': 'DEX',
+          'Survival': 'WIS'
+        },
+        cardSpacing: 55,
+        spellcastingClasses: ['Bard', 'Cleric', 'Druid', 'Paladin', 'Ranger', 'Sorcerer', 'Warlock', 'Wizard'],
+      };
+      const SPELLCASTING_CLASSES = [
+  'Bard', 'Cleric', 'Druid', 'Paladin', 'Ranger', 'Sorcerer', 'Warlock', 'Wizard',
+  'Artificer', 'Blood Hunter' // Including some additional classes that might be in use
+];
+      let characterCards = [];
+      let spellsData = [];
+      let itemsData = [];
+let weaponsData = [];
+let armorData = [];
+let premadeCharactersLoaded = false;
+
+
+      async function loadSpellsData() {
+        try {
+          const response = await fetch('spells.json');
+          spellsData = await response.json();
+        } catch (error) {
+          console.error('Error loading spells data:', error);
+        }
+      }
+
+      document.getElementById('openFileButton').addEventListener('click', () => {
+        document.getElementById('fileInput').click();
+      });
+
+      document.getElementById('fileInput').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const character = JSON.parse(e.target.result);
+              saveCharacterToLocalStorage(character);
+              renderCharacterCard(character);
+            } catch (error) {
+              showNotification('Error parsing JSON file');
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+
+      document.getElementById('deleteButton').addEventListener('click', () => {
+        const activeCard = document.querySelector('.character-card.active');
+        if (activeCard) {
+          const characterName = activeCard.querySelector('h2').textContent;
+          deleteCharacterFromLocalStorage(characterName);
+          activeCard.remove();
+          characterCards = characterCards.filter(card => card !== activeCard);
+          updateCardPositions();
+          showNotification(`Deleted character: ${characterName}`);
+        } else {
+          showNotification('No character selected for deletion');
+        }
+      });
+
+      function saveCharacterToLocalStorage(character) {
+        let characters = JSON.parse(localStorage.getItem('characters') || '[]');
+        characters.push(character);
+        localStorage.setItem('characters', JSON.stringify(characters));
+      }
+
+      function deleteCharacterFromLocalStorage(characterName) {
+        let characters = JSON.parse(localStorage.getItem('characters') || '[]');
+        characters = characters.filter(char => char.name !== characterName);
+        localStorage.setItem('characters', JSON.stringify(characters));
+      }
+
+      function loadCharactersFromLocalStorage() {
+  const characters = JSON.parse(localStorage.getItem('characters') || '[]');
+  characters.forEach(character => {
+    if (!document.querySelector(`.character-card[data-name="${character.name}"]`)) {
+      renderCharacterCard(character);
+    }
+  });
+}
+
+      function getBackgroundImage(character) {
+        const race = character.race.toLowerCase();
+        const characterClass = character.class.toLowerCase();
+        let raceInitial = race === 'dragonborn' ? 'db' : race === 'tabaxi' ? 'tb' : race === 'goliath' ? 'go' : race[0];
+        return `${raceInitial}-${characterClass}.jpg`;
+      }
+
+
+function renderCharacterCard(character) {
+  const card = document.createElement('div');
+  card.className = 'character-card stacked';
+  card.dataset.character = JSON.stringify(character);
+  card.dataset.name = character.name; // Add this line
+  card.style.backgroundImage = `url(${getBackgroundImage(character)})`;
+
+  const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
+    const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
+    const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
+    const proficient = character.skills[skill].proficient;
+    const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
+    const totalBonus = getModifier(attributeScore) + proficiencyBonus;
+    return `
+      <div class="skill">
+        <div class="skill-header">
+          <span class="skill-name">${skill}</span>
+          <span class="skill-attribute">(${attributeAbbr})</span>
+        </div>
+        <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
+          Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  card.innerHTML = `
+    <button class="close-button" onclick="returnCardToDeck(this)">
+      <span class="material-icons">close</span>
+    </button>
+    <h2>${character.name}</h2>
+    <p>${character.race} Lvl:${character.level} ${character.class} (${character.subclass})</p>
+    <div class="character-actions">
+      <button class="action-button initiative-button" onclick="rollInitiative(this, ${getModifier(character.abilityScores.dexterity)})">
+        <span class="material-icons">casino</span> Initiative
+      </button>
+      <button class="action-button long-rest-button" onclick="performLongRest(this)">
+        <span class="material-icons">hotel</span> Long Rest
+      </button>
+      <button class="action-button short-rest-button" onclick="performShortRest(this)">
+        <span class="material-icons">coffee</span> Short Rest
+      </button>
+    </div>
+    <p>HP: <span class="hp-value">${character.hp}</span>/<span class="max-hp-value">${character.maxHp}</span> | AC: <span class="ac-value">${character.ac}</span>
+    <span class="hp-controls">
+      <button onclick="changeHP(this, -1)"><span class="material-icons">remove</span></button>
+      <input type="number" value="1" min="1" max="100" onchange="updateHPChange(this)">
+      <button onclick="changeHP(this, 1)"><span class="material-icons">add</span></button>
+    </span>
+    <button class="add-item-button" onclick="showAddItemModal(this)">
+      <span class="material-icons">add_box</span> Add Item
+    </button>
+    </p>
+    <div class="view-buttons">
+      <button class="active" onclick="changeView(this, 'attributes')">Attributes</button>
+      <button onclick="changeView(this, 'skills')">Skills</button>
+      <button onclick="changeView(this, 'inventory')">Inventory</button>
+      <button onclick="changeView(this, 'spells')">Spells</button>
+    </div>
+    <div class="attributes">
+      ${GG_ALL_GAME_CONFIG.attributeAbbreviations.map(attr => `
+        <div class="attribute">
+          <strong>${attr}</strong><br>
+          <button onclick="rollAttribute('${attr}', ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]})">
+            ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]}
+          </button><br>
+          ${getModifierString(character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]])}
+        </div>
+      `).join('')}
+    </div>
+    <div class="skills" style="display: none;">
+      <div class="skills-container">
+        ${skillsHtml}
+      </div>
+    </div>
+    <div class="inventory" style="display: none;">
+      <h3>Weapons</h3>
+      <div class="weapons-list inventory-grid"></div>
+      <h3>Armor</h3>
+      <div class="armor-list inventory-grid"></div>
+      <h3>Other Items</h3>
+      <div class="items-list inventory-grid"></div>
+    </div>
+    <div class="spells" style="display: none;">
+      ${renderSpellsSection(character)}
+    </div>
+  `;
+
+  const logBox = document.createElement('div');
+  logBox.className = 'log-box';
+  card.appendChild(logBox);
+
+  document.getElementById('characterStack').appendChild(card);
+  characterCards.push(card);
+  updateCardPositions();
+  updateInventoryDisplay(card, character);
+
+  card.addEventListener('click', (event) => {
+    if (!event.target.closest('.close-button')) {
+      activateCard(card);
+    }
+  });
+}
+
+function showAddItemModal(button) {
+  const existingModal = document.querySelector('.add-item-modal');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  const modal = document.createElement('div');
+  modal.className = 'add-item-modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Add Item</h3>
+      <select id="item-type" onchange="updateItemSelect()">
+        <option value="weapon">Weapon</option>
+        <option value="armor">Armor</option>
+        <option value="item">Other Item</option>
+      </select>
+      <select id="item-select"></select>
+      <button onclick="addSelectedItem(this)">Add</button>
+      <button onclick="closeModal(this)">Cancel</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  updateItemSelect();
+}
+
+// Function to update the item select dropdown based on the chosen type
+function updateItemSelect() {
+  const typeSelect = document.getElementById('item-type');
+  const itemSelect = document.getElementById('item-select');
+  const selectedType = typeSelect.value;
+  let items;
+  switch (selectedType) {
+    case 'weapon':
+      items = weaponsData;
+      break;
+    case 'armor':
+      items = armorData;
+      break;
+    case 'item':
+      items = itemsData;
+      break;
+  }
+  itemSelect.innerHTML = items.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
+}
+
+// Function to add the selected item to the character's inventory
+function addSelectedItem(button) {
+  const modal = button.closest('.add-item-modal');
+  const card = document.querySelector('.character-card.active');
+  if (!card) {
+    showNotification("No active character card found.");
+    return;
+  }
+
+  const character = JSON.parse(card.dataset.character);
+  const typeSelect = modal.querySelector('#item-type');
+  const itemSelect = modal.querySelector('#item-select');
+  const selectedType = typeSelect.value;
+  const selectedItemName = itemSelect.value;
+
+  let selectedItem;
+  switch (selectedType) {
+    case 'weapon':
+      selectedItem = weaponsData.find(item => item.name === selectedItemName);
+      break;
+    case 'armor':
+      selectedItem = armorData.find(item => item.name === selectedItemName);
+      break;
+    case 'item':
+      selectedItem = itemsData.find(item => item.name === selectedItemName);
+      break;
+  }
+
+  if (selectedItem) {
+    if (!character.inventory) character.inventory = [];
+    character.inventory.push(selectedItem);
+
+    if (selectedType === 'armor') {
+      updateCharacterAC(character, selectedItem);
+    }
+
+    card.dataset.character = JSON.stringify(character);
+    updateInventoryDisplay(card, character);
+    showNotification(`Added ${selectedItemName} to inventory.`);
+  } else {
+    showNotification(`Item ${selectedItemName} not found.`);
+  }
+
+  closeModal(button);
+}
+
+// Function to update character's AC when adding or removing armor
+function updateCharacterAC(character, armor) {
+  let baseAC = 10;
+  const dexModifier = Math.floor((character.abilityScores.dexterity - 10) / 2);
+  
+  if (armor) {
+    baseAC = armor.ac;
+    if (armor.addDex) {
+      baseAC += Math.min(dexModifier, armor.maxDex || Infinity);
+    }
+  } else {
+    baseAC += dexModifier;
+  }
+
+  // Special cases for Barbarian and Monk
+  if (character.class === 'Barbarian' && !armor) {
+    const conModifier = Math.floor((character.abilityScores.constitution - 10) / 2);
+    baseAC += conModifier;
+  } else if (character.class === 'Monk' && !armor) {
+    const wisModifier = Math.floor((character.abilityScores.wisdom - 10) / 2);
+    baseAC += wisModifier;
+  }
+
+  character.ac = baseAC;
+  return character;
+}
+
+// Function to remove an item from the character's inventory
+function removeItem(button, itemName) {
+  const card = button.closest('.character-card');
+  const character = JSON.parse(card.dataset.character);
+  const itemIndex = character.inventory.findIndex(item => item.name === itemName);
+  if (itemIndex > -1) {
+    const removedItem = character.inventory.splice(itemIndex, 1)[0];
+    if (removedItem.type === 'armor') {
+      // If we're removing armor, recalculate AC
+      character.ac = 10 + Math.floor((character.abilityScores.dexterity - 10) / 2);
+    }
+  }
+  card.dataset.character = JSON.stringify(character);
+  updateInventoryDisplay(card, character);
+}
+
+
+function updateInventoryDisplay(card, character) {
+  const inventoryDiv = card.querySelector('.inventory');
+  let totalWeight = 0;
+
+  function createItemHtml(item, type) {
+    totalWeight += parseFloat(item.weight);
+    let specificContent = '';
+    if (type === 'weapon') {
+      specificContent = `
+        <span>${item.damageType}, ${item.properties.join(', ')}</span>
+        <button onclick="rollWeapon('${item.name}', '${item.damage}', '${item.damageType}')">
+          Roll ${item.damage}
+        </button>
+      `;
+    } else if (type === 'armor') {
+      specificContent = `<span>AC: ${item.ac}</span>`;
+    }
+    return `
+      <div class="inventory-item ${type}-item">
+        <strong>${item.name}</strong>
+        ${specificContent}
+        <div class="item-details">
+          <span class="item-weight">${item.weight} lb</span>
+          <button class="remove-item" onclick="removeItem(this, '${item.name}')">Remove</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const weaponsHtml = character.inventory
+    .filter(item => item.type === 'weapon')
+    .map(item => createItemHtml(item, 'weapon'))
+    .join('');
+
+  const armorHtml = character.inventory
+    .filter(item => item.type === 'armor')
+    .map(item => createItemHtml(item, 'armor'))
+    .join('');
+
+  const itemsHtml = character.inventory
+    .filter(item => item.type === 'gear')
+    .map(item => createItemHtml(item, 'item'))
+    .join('');
+
+  inventoryDiv.innerHTML = `
+    <h3>Weapons</h3>
+    <div class="inventory-grid weapons-list">${weaponsHtml || 'No weapons'}</div>
+    <h3>Armor</h3>
+    <div class="inventory-grid armor-list">${armorHtml || 'No armor'}</div>
+    <h3>Other Items</h3>
+    <div class="inventory-grid items-list">${itemsHtml || 'No other items'}</div>
+    <div class="total-weight">Total Weight: ${totalWeight.toFixed(2)} lb</div>
+  `;
+
+  // Update AC display
+  card.querySelector('.ac-value').textContent = character.ac;
+}
+
+// Function to close the modal
+function closeModal(button) {
+  const modal = button.closest('.add-item-modal');
+  modal.remove();
+}
+
+
+
+// New function to render the spells section
+// Update the renderSpellsSection function
+function renderSpellsSection(character) {
+  if (!isCharacterSpellcaster(character)) {
+    return '<p>This character cannot use magic.</p>';
+  }
+
+  const spellSlots = character.spellcasting?.spellSlots || {};
+  const currentSpellSlots = character.spellcasting?.currentSpellSlots || {};
+
+  return `
+    <div class="spell-slots">
+      ${Object.entries(spellSlots).map(([level, slots]) => `
+        <span class="spell-slot">Level ${level}: <span class="current-slots">${currentSpellSlots[level] || 0}</span>/${slots}</span>
+      `).join('')}
+    </div>
+    ${renderSpellList(character.spellcasting?.spells || [])}
+  `;
+}
+
+// Add a new function to check if a character is a spellcaster
+function isCharacterSpellcaster(character) {
+  return SPELLCASTING_CLASSES.includes(character.class);
+}
+
+
+function renderSpellList(characterSpells) {
+  if (!characterSpells || characterSpells.length === 0) {
+    return '<p>This character has no spells.</p>';
+  }
+
+  const spellsByLevel = characterSpells.reduce((acc, spellName) => {
+    const spell = spellsData.find(s => s.name === spellName);
+    if (spell) {
+      if (!acc[spell.level]) acc[spell.level] = [];
+      acc[spell.level].push(spell);
+    }
+    return acc;
+  }, {});
+
+  return Object.entries(spellsByLevel)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([level, spells]) => `
+      <div class="spell-level">
+        <h3>Level ${level === '0' ? 'Cantrips' : level}</h3>
+        ${spells.sort((a, b) => a.name.localeCompare(b.name)).map(spell => `
+          <div class="spell-item">
+            <div class="spell-header" onclick="toggleSpellDetails(this)">
+              <span>${spell.name}</span>
+              <span class="material-icons chevron">expand_more</span>
+            </div>
+            <div class="spell-content">
+              <p><strong>Level:</strong> ${spell.level}</p>
+              <p><strong>Classes:</strong> ${spell.classes.join(', ')}</p>
+              <p>${parseDiceNotation(spell.description, spell.level, spell.name)}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+}
+
+function castSpell(name, level, button) {
+  const card = button.closest('.character-card');
+  const character = JSON.parse(card.dataset.character);
+  if (isCharacterSpellcaster(character)) {
+    if (level === 0) {
+      showNotification(`Casting ${name} (Cantrip)...`);
+    } else {
+      const currentSlots = character.spellcasting?.currentSpellSlots?.[level] || 0;
+      if (currentSlots > 0) {
+        character.spellcasting.currentSpellSlots[level]--;
+        card.dataset.character = JSON.stringify(character);
+        updateSpellSlots(card, character);
+        showNotification(`Casting ${name} (Level ${level})...`);
+      } else {
+        showNotification(`No spell slots left for level ${level}!`);
+      }
+    }
+  } else {
+    showNotification("This character cannot cast spells.");
+  }
+}
+
+// Update the updateSpellSlots function
+function updateSpellSlots(card, character) {
+  const spellSlotsDiv = card.querySelector('.spell-slots');
+  if (spellSlotsDiv && character.spellcasting) {
+    Object.entries(character.spellcasting.spellSlots).forEach(([level, slots]) => {
+      const slotSpan = spellSlotsDiv.querySelector(`.spell-slot:nth-child(${level}) .current-slots`);
+      if (slotSpan) {
+        slotSpan.textContent = character.spellcasting.currentSpellSlots[level];
+      }
+    });
+  }
+}
+
+      function updateCardPositions() {
+        characterCards.forEach((card, index) => {
+          card.style.top = `${index * GG_ALL_GAME_CONFIG.cardSpacing}px`;
+          card.style.zIndex = index;
+        });
+      }
+
+      function activateCard(card) {
+        characterCards.forEach(c => c.classList.add('stacked'));
+        card.classList.remove('stacked');
+        card.classList.add('active');
+        card.style.top = '0';
+        card.style.zIndex = '100';
+      }
+
+      function returnCardToDeck(closeButton) {
+        const card = closeButton.closest('.character-card');
+        card.classList.add('stacked');
+        card.classList.remove('active');
+        updateCardPositions();
+      }
+
+      function getModifier(score) {
+        return Math.floor((score - 10) / 2);
+      }
+
+      function getModifierString(score) {
+        const modifier = getModifier(score);
+        return modifier >= 0 ? `+${modifier}` : `${modifier}`;
+      }
+
+      function rollAttribute(attr, score) {
+        const roll = Math.floor(Math.random() * 20) + 1;
+        const modifier = getModifier(score);
+        const total = roll + modifier;
+        showNotification(`${attr} Roll: ${roll} ${getModifierString(score)} = ${total}`);
+      }
+
+      function rollSkill(skill, bonus, proficient, attributeAbbr) {
+        const roll = Math.floor(Math.random() * 20) + 1;
+        const total = roll + bonus;
+        const message = `${skill} (${attributeAbbr}) Roll: ${roll} ${bonus >= 0 ? '+' : ''}${bonus} = ${total} ${proficient ? '(Proficient)' : ''}`;
+        showNotification(message);
+      }
+
+      function rollWeapon(name, damage, damageType) {
+        const [diceCount, diceFaces] = damage.split('d').map(Number);
+        let damageRoll = 0;
+        for (let i = 0; i < diceCount; i++) {
+          damageRoll += Math.floor(Math.random() * diceFaces) + 1;
+        }
+        showNotification(`${name} Attack: ${damageRoll} ${damageType} damage`);
+      }
+
+
+
+      function toggleSpellDetails(header) {
+  const content = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  if (content.style.display === 'block') {
+    content.style.display = 'none';
+    // chevron.textContent = 'expand_more';
+  } else {
+    content.style.display = 'block';
+    // chevron.textContent = 'expand_less';
+  }
+}
+
+function changeView(button, view) {
+  const card = button.closest('.character-card');
+  card.querySelectorAll('.view-buttons button').forEach(btn => btn.classList.remove('active'));
+  button.classList.add('active');
+  
+  const sections = card.querySelectorAll('.attributes, .skills, .inventory, .spells');
+  sections.forEach(section => {
+    if (section.classList.contains(view)) {
+      if (view === 'attributes' || view === 'skills') {
+        section.style.display = 'flex';
+      } else {
+        section.style.display = 'block';
+      }
+    } else {
+      section.style.display = 'none';
+    }
+  });
+}
+
+      function showNotification(message) {
+        const notification = document.getElementById('notificationArea');
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, GG_ALL_GAME_CONFIG.notificationDuration);
+        const activeCard = document.querySelector('.character-card.active');
+        if (activeCard) {
+          const logBox = activeCard.querySelector('.log-box');
+          const logEntry = document.createElement('div');
+          logEntry.className = 'log-entry';
+          logEntry.textContent = message;
+          logBox.insertBefore(logEntry, logBox.firstChild);
+        }
+      }
+
+      function changeHP(button, change) {
+        const card = button.closest('.character-card');
+        const hpSpan = card.querySelector('.hp-value');
+        const maxHpSpan = card.querySelector('.max-hp-value');
+        const input = card.querySelector('.hp-controls input');
+        const currentHP = parseInt(hpSpan.textContent);
+        const maxHP = parseInt(maxHpSpan.textContent);
+        const changeAmount = parseInt(input.value) * change;
+        const newHP = Math.min(maxHP, Math.max(0, currentHP + changeAmount));
+        hpSpan.textContent = newHP;
+        showNotification(`HP ${change > 0 ? 'increased' : 'decreased'} by ${Math.abs(newHP - currentHP)}`);
+      }
+
+      function updateHPChange(input) {
+        input.value = Math.max(1, Math.min(100, input.value));
+      }
+
+      function rollInitiative(button, dexModifier) {
+        const roll = Math.floor(Math.random() * 20) + 1;
+        const total = roll + dexModifier;
+        showNotification(`Initiative Roll: ${roll} ${dexModifier >= 0 ? '+' : ''}${dexModifier} = ${total}`);
+      }
+
+
+function parseDiceNotation(description, spellLevel, spellName) {
+  const diceRegex = /{@(?:dice|damage) ([^}]+)}/g;
+  return description.replace(diceRegex, (match, diceNotation) => {
+    return `<button class="dice-roll-button" onclick="rollDice('${diceNotation}', ${spellLevel}, '${spellName}')">${diceNotation}</button>`;
+  });
+}
+
+// Add short rest function
+function shortRest(character) {
+  const hitDiceToUse = prompt(`How many hit dice would you like to use? (Available: ${character.currentHitDice})`);
+  let hpRecovered = 0;
+  for (let i = 0; i < hitDiceToUse; i++) {
+    const hitDieRoll = Math.floor(Math.random() * character.hitDie.faces) + 1;
+    hpRecovered += hitDieRoll + Math.floor((character.abilityScores.constitution - 10) / 2);
+  }
+  character.hp = Math.min(character.maxHp, character.hp + hpRecovered);
+  character.currentHitDice -= hitDiceToUse;
+
+  if (character.class === 'Warlock' && character.spellcasting) {
+    Object.keys(character.spellcasting.spellSlots).forEach(level => {
+      character.spellcasting.currentSpellSlots[level] = character.spellcasting.spellSlots[level];
+    });
+    showNotification(`Short rest completed. Recovered ${hpRecovered} HP. Warlock spell slots restored.`);
+  } else {
+    showNotification(`Short rest completed. Recovered ${hpRecovered} HP.`);
+  }
+  return character;
+}
+
+function rollDice(diceNotation, spellLevel, spellName) {
+  const [count, sides] = diceNotation.split('d').map(Number);
+  let total = 0;
+  const rolls = [];
+  for (let i = 0; i < count; i++) {
+    const roll = Math.floor(Math.random() * sides) + 1;
+    total += roll;
+    rolls.push(roll);
+  }
+  const result = `Cast ${spellName} (Level ${spellLevel}): Rolled ${diceNotation}: ${rolls.join(' + ')} = ${total}`;
+  showNotification(result);
+  logRoll(result);
+
+  // Update spell slots if it's not a cantrip
+  if (spellLevel > 0) {
+    const activeCard = document.querySelector('.character-card.active');
+    if (activeCard) {
+      const character = JSON.parse(activeCard.dataset.character);
+      if (character.spellcasting && character.spellcasting.currentSpellSlots[spellLevel] > 0) {
+        character.spellcasting.currentSpellSlots[spellLevel]--;
+        activeCard.dataset.character = JSON.stringify(character);
+        updateSpellSlots(activeCard, character);
+      }
+    }
+  }
+}
+
+function logRoll(result) {
+  const activeCard = document.querySelector('.character-card.active');
+  if (activeCard) {
+    const logBox = activeCard.querySelector('.log-box');
+    const logEntry = document.createElement('div');
+    logEntry.className = 'log-entry';
+    logEntry.textContent = result;
+    logBox.insertBefore(logEntry, logBox.firstChild);
+  }
+}
+
+document.getElementById('loadPremadeButton').addEventListener('click', loadPremadeCharacters);
+
+async function loadPremadeCharacters() {
+  if (premadeCharactersLoaded) {
+    showNotification("Premade characters have already been loaded.");
+    return;
+  }
+
+  const button = document.getElementById('loadPremadeButton');
+  button.disabled = true;
+  button.textContent = 'Loading...';
+
+  try {
+    const premadeCharacters = [
+      'Bree.json',
+      'Cade.json',
+      'Deva.json',
+      'Jasper.json',
+      'Jovah.json',
+      'Lark.json'
+    ];
+
+    const characters = await Promise.all(premadeCharacters.map(async (file) => {
+      const response = await fetch(`premade/${file}`);
+      return response.json();
+    }));
+
+    let loadedCount = 0;
+    characters.forEach(character => {
+      if (!characterExistsInLocalStorage(character.name)) {
+        saveCharacterToLocalStorage(character);
+        renderCharacterCard(character);
+        loadedCount++;
+      }
+    });
+
+    showNotification(`Loaded ${loadedCount} new premade characters.`);
+    premadeCharactersLoaded = true;
+    button.textContent = 'Premade Characters Loaded';
+  } catch (error) {
+    console.error('Error loading premade characters:', error);
+    showNotification('Failed to load premade characters.');
+    button.disabled = false;
+    button.textContent = 'Load Premade Characters';
+  }
+}
+
+function characterExistsInLocalStorage(characterName) {
+  const characters = JSON.parse(localStorage.getItem('characters') || '[]');
+  return characters.some(char => char.name === characterName);
+}
+
+
+async function loadItemData() {
+  try {
+    const [items, weapons, armor] = await Promise.all([
+      fetch('items.json').then(response => response.json()),
+      fetch('weapons.json').then(response => response.json()),
+      fetch('armor.json').then(response => response.json())
+    ]);
+    itemsData = items;
+    weaponsData = weapons;
+    armorData = armor;
+  } catch (error) {
+    console.error('Error loading item data:', error);
+  }
+}
+
+      // Load characters from local storage and spells data when the page loads
+      window.addEventListener('load', async () => {
+        await loadItemData();
+        await loadSpellsData();
+        loadCharactersFromLocalStorage();
+      });
+
+      window.rollDice = function(diceNotation, spellLevel, spellName) {
+  const [count, sides] = diceNotation.split('d').map(Number);
+  let total = 0;
+  const rolls = [];
+  for (let i = 0; i < count; i++) {
+    const roll = Math.floor(Math.random() * sides) + 1;
+    total += roll;
+    rolls.push(roll);
+  }
+  const result = `Cast ${spellName} (Level ${spellLevel}): Rolled ${diceNotation}: ${rolls.join(' + ')} = ${total}`;
+  showNotification(result);
+  logRoll(result);
+  updateSpellSlot(spellLevel);
+};
+
+window.performLongRest = function(button) {
+  const card = button.closest('.character-card');
+  let character = JSON.parse(card.dataset.character);
+  character = longRest(character);
+  card.dataset.character = JSON.stringify(character);
+  updateCharacterDisplay(card, character);
+};
+
+window.performShortRest = function(button) {
+  const card = button.closest('.character-card');
+  let character = JSON.parse(card.dataset.character);
+  character = shortRest(character);
+  card.dataset.character = JSON.stringify(character);
+  updateCharacterDisplay(card, character);
+};
+
+// Function to update character display after rest
+function updateCharacterDisplay(card, character) {
+  card.querySelector('.hp-value').textContent = character.hp;
+  updateSpellSlots(card, character);
+  // Update other relevant parts of the display as needed
+}
+
+      // Expose necessary functions to global scope
+      window.rollAttribute = rollAttribute;
+      window.rollSkill = rollSkill;
+      window.rollWeapon = rollWeapon;
+      window.castSpell = castSpell;
+      window.changeView = changeView;
+      window.returnCardToDeck = returnCardToDeck;
+      window.changeHP = changeHP;
+      window.updateHPChange = updateHPChange;
+      window.rollInitiative = rollInitiative;
+      window.toggleSpellDetails = toggleSpellDetails;
+      window.parseDiceNotation = parseDiceNotation;
+window.logRoll = logRoll;
+window.showNotification = showNotification;
+window.rollDice = rollDice;
+window.showAddItemModal = showAddItemModal;
+window.addSelectedItem = addSelectedItem;
+window.removeItem = removeItem;
+window.closeModal = closeModal;
+window.updateItemSelect = updateItemSelect;
+window.loadPremadeCharacters = loadPremadeCharacters;
+    })();
+  </script>
+</body>
+</html>

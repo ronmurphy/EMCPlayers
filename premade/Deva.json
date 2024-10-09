@@ -1,0 +1,335 @@
+{
+  "name": "Deva",
+  "race": "Human",
+  "class": "Sorcerer",
+  "subclass": "Storm Sorcery",
+  "level": 5,
+  "hitDie": {
+    "number": 1,
+    "faces": 6
+  },
+  "maxHitDice": 5,
+  "currentHitDice": 5,
+  "background": "",
+  "abilityScores": {
+    "strength": 15,
+    "dexterity": 16,
+    "constitution": 14,
+    "intelligence": 17,
+    "wisdom": 17,
+    "charisma": 13
+  },
+  "skills": {
+    "acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "animalHandling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "history": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "sleightOfHand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "survival": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Animal Handling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "History": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Sleight of Hand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Survival": {
+      "proficient": false,
+      "bonus": 0
+    }
+  },
+  "feats": [],
+  "inventory": [
+    {
+      "name": "Spear",
+      "type": "weapon",
+      "damage": "1d6",
+      "damageType": "piercing",
+      "properties": [
+        "Thrown (range 20/60)",
+        "Versatile (1d8)"
+      ],
+      "cost": "1 gp",
+      "weight": "3 lb.",
+      "width": 1,
+      "height": 3
+    },
+    {
+      "name": "Leather",
+      "type": "armor",
+      "armorType": "Light",
+      "ac": 11,
+      "addDex": true,
+      "stealthDisadvantage": false,
+      "cost": "10 gp",
+      "weight": "10 lb.",
+      "width": 2,
+      "height": 3
+    },
+    {
+      "name": "Backpack",
+      "type": "gear",
+      "cost": "2 gp",
+      "weight": "5 lb.",
+      "width": 2,
+      "height": 2
+    },
+    {
+      "name": "Bedroll",
+      "type": "gear",
+      "cost": "1 gp",
+      "weight": "7 lb.",
+      "width": 2,
+      "height": 1
+    },
+    {
+      "name": "Mess kit",
+      "type": "gear",
+      "cost": "2 sp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 1
+    },
+    {
+      "name": "Tinderbox",
+      "type": "gear",
+      "cost": "5 sp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 1
+    },
+    {
+      "name": "Torch",
+      "type": "gear",
+      "cost": "1 cp",
+      "weight": "1 lb.",
+      "width": 1,
+      "height": 2
+    },
+    {
+      "name": "Rations",
+      "type": "gear",
+      "cost": "5 sp",
+      "weight": "2 lb.",
+      "width": 1,
+      "height": 1
+    }
+  ],
+  "spells": [],
+  "hp": 32,
+  "maxHp": 32,
+  "ac": 13,
+  "initiative": 3,
+  "proficiencyBonus": 3,
+  "savingThrows": {
+    "strength": {
+      "value": 0,
+      "proficient": false
+    },
+    "dexterity": {
+      "value": 0,
+      "proficient": false
+    },
+    "constitution": {
+      "value": 0,
+      "proficient": false
+    },
+    "intelligence": {
+      "value": 0,
+      "proficient": false
+    },
+    "wisdom": {
+      "value": 0,
+      "proficient": false
+    },
+    "charisma": {
+      "value": 0,
+      "proficient": false
+    }
+  },
+  "notes": "",
+  "currency": {
+    "copper": 0,
+    "silver": 10,
+    "electrum": 0,
+    "gold": 0,
+    "platinum": 0,
+    "gems": ""
+  },
+  "abilityScoreImprovementsLeft": 0,
+  "speed": 30,
+  "experiencePoints": 0,
+  "languages": [],
+  "traits": [],
+  "spellcasting": {
+    "class": "",
+    "ability": "",
+    "spellSaveDC": 0,
+    "spellAttackBonus": 0,
+    "spells": [
+      "Booming Blade",
+      "Chill Touch",
+      "Fire Bolt",
+      "Green-Flame Blade",
+      "Chromatic Orb",
+      "Shocking Grasp",
+      "Mage Hand",
+      "Chaos Bolt",
+      "Cloud of Daggers",
+      "Flame Blade",
+      "Invisibility",
+      "Fireball",
+      "Fly",
+      "Flame Arrows"
+    ],
+    "spellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    },
+    "currentSpellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    }
+  }
+}

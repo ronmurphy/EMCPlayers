@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;D 5e Character Viewer</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="deck.css">
+</head>
+
+<body>
+  <input type="file" id="fileInput" accept=".json">
+  <center>  <button id="openFileButton" class="main-button" >Open Character File</button>
+  <button id="deleteButton" class="main-button" >Delete Character</button>
+  <button id="loadPremadeButton" class="main-button" onclick="loadPremadeCharacters()">Premade Characters</button>
+</center>
+  <div id="characterStack"></div>
+  <div id="notificationArea"></div>
+  <script src="deck.js"></script>
+</body>
+</html>

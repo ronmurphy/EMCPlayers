@@ -1,0 +1,697 @@
+body {
+    font-family: Arial,sans-serif;
+    background-color: #4a3728;
+    margin: 0;
+    padding: 20px;
+    background-image: url(dark-leather-texture.jpg);
+    background-repeat: repeat;
+    background-size: 500px 500px;
+    color: #f0f0f0
+}
+
+#openFileButton {
+    background-color: #4caf50
+}
+
+#deleteButton,#openFileButton {
+    border: 0;
+    color: #fff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer
+}
+
+#characterStack {
+    position: relative;
+    height: 600px;
+    width: 420px;
+    margin: 0 auto;
+    background-color: rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 10px
+}
+
+.character-card,.character-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center
+}
+
+.character-card {
+    background-color: rgba(255,255,255,.7);
+    background-blend-mode: overlay;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.1);
+    padding: 20px;
+    width: 400px;
+    transition: all .3s ease
+}
+
+.character-card::before {
+    content: "";
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    opacity: .5;
+    z-index: -1;
+    border-radius: inherit
+}
+
+.character-card>* {
+    position: relative;
+    z-index: 1
+}
+
+.character-card .attribute,.character-card .feat-item,.character-card .skill,.character-card .spell-item,.character-card button,.character-card h2,.character-card p {
+    background-color: rgba(255,255,255,.2);
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px
+}
+
+.character-card h2 {
+    color: #1a1a1a;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5)
+}
+
+.character-card.stacked {
+    height: 65px;
+    overflow: hidden
+}
+
+.character-card.active {
+    z-index: 100;
+    height: auto
+}
+
+.close-button {
+    right: 5px;
+    background-color: rgba(255,0,0,.7);
+    border: 0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0
+}
+
+.close-button:hover {
+    background-color: rgba(255,0,0,.9)
+}
+
+/* .attributes,.skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+} */
+
+.attributes,.skills {
+    display: block;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 99%;
+    border: 1px solid #eee;
+    border-radius: 5px
+
+}
+
+.attribute {
+    width: 30%;
+    border: 1px solid #eee;
+    border-radius: 5px
+}
+
+.attribute,.skill {
+    text-align: center;
+    margin-bottom: 10px;
+    box-sizing: border-box
+}
+
+/* modified */
+
+.attributes, .skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .attribute, .skill {
+    text-align: center;
+    width: 30%;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  /* mod */
+
+.view-buttons {
+    position: absolute;
+    right: 10px;
+    top: 10px
+}
+
+.view-buttons button {
+    background-color: rgba(255,255,255,.3);
+    border: 1px solid rgba(0,0,0,.1);
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 3px
+}
+
+.view-buttons button.active {
+    background-color: rgba(0,140,186,.7);
+    color: #fff
+}
+
+.hp-controls,.initiative-button {
+    display: inline-flex;
+    align-items: center
+}
+
+.hp-controls {
+    justify-content: center;
+    margin-left: 10px
+}
+
+.hp-controls input {
+    width: 40px;
+    text-align: center;
+    margin: 0 5px
+}
+
+.initiative-button {
+    border: 0;
+    text-align: center;
+    text-decoration: none;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 3px
+}
+
+.initiative-button,.long-rest-button,.short-rest-button {
+    padding: 5px 10px;
+    font-size: 14px
+}
+
+.add-item-button,.cast-button,.hp-controls button,.long-rest-button,.short-rest-button {
+    background-color: #4caf50;
+    border: 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 3px
+}
+
+.cast-button {
+    padding: 5px 10px;
+    font-size: 14px
+}
+
+.initiative-button {
+    background-color: orange
+}
+
+.skills-container {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: calc(100% - 20px)
+}
+
+.spell-slots {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    flex-wrap: wrap
+}
+
+.spell-slot {
+    background-color: rgba(255,255,255,.3);
+    padding: 3px 6px;
+    border-radius: 3px;
+    margin: 2px;
+    display: inline-block
+}
+
+.spell-item {
+    background-color: rgba(249,249,249,.8);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    overflow: hidden
+}
+
+.feat-header,.spell-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: rgba(233,233,233,.8);
+    cursor: pointer
+}
+
+.feat-content,.spell-content {
+    padding: 10px;
+    display: none
+}
+
+.log-box {
+    background-color: rgba(255,255,255,.2);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    height: 200px;
+    overflow-y: auto;
+    font-size: 14px
+}
+
+.log-entry {
+    background-color: rgba(255,255,255,.3);
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 3px
+}
+
+#notificationArea,.inventory {
+    padding: 10px;
+    border-radius: 5px
+}
+
+#notificationArea {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(51,51,51,.9);
+    display: none
+}
+
+.inventory {
+    background-color: rgba(255,255,255,.05)
+}
+
+.inventory h3 {
+    color: #ddd;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-top: 20px
+}
+
+.inventory h3,.inventory-item {
+    margin-bottom: 10px
+}
+
+.armor-item,.other-item,.weapon-item {
+    display: flex;
+    flex-direction: column
+}
+
+.inventory-item button,.inventory-item span,.inventory-item strong {
+    color: #1a1a1a
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+    gap: 10px
+}
+
+.list-layout {
+    display: block
+}
+
+.total-weight {
+    margin-top: 20px;
+    font-weight: 700;
+    color: #ddd;
+    text-align: right
+}
+
+@media (max-width:600px) {
+    .inventory-item {
+        font-size: 14px
+    }
+
+    .inventory-item button {
+        padding: 3px 6px;
+        font-size: .8em
+    }
+}
+
+.hp-controls button {
+    font-size: 12px;
+    padding: 2px 5px
+}
+
+.character-actions {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 5px
+}
+
+.action-button {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.add-item-button {
+    font-size: 12px;
+    padding: 2px 5px
+}
+
+.skills-container {
+    height: auto
+}
+
+.skill {
+    width: 100%
+}
+
+.add-item-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow-y: auto
+}
+
+.armor-list,.weapons-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+    gap: 10px
+}
+
+.close-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: red;
+    opacity: 1
+}
+
+.character-card,.character-card :not(button) {
+    color: #000
+}
+
+#notificationArea,.cast-button,.close-button,.hp-controls button,.log-box,.log-entry {
+    color: #fff
+}
+
+.add-item-button,.initiative-button,.long-rest-button,.short-rest-button,.view-buttons button {
+    color: #000;
+    font-weight: 700
+}
+
+.modal-content {
+    background-color: #f0f0f0;
+    color: #000
+}
+
+.modal-content button {
+    color: #000;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc
+}
+
+.modal-content button:hover {
+    background-color: #d0d0d0
+}
+
+.attributes button,.skills button {
+    color: #000
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    max-height: none;
+    overflow-y: visible
+}
+
+.inventory-item {
+    background-color: rgba(255,255,255,.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column
+}
+
+.item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto
+}
+
+.inventory {
+    max-height: none;
+    overflow-y: visible
+}
+
+#loadPremadeButton,.dice-roll-button {
+    background-color: #4caf50;
+    border: 0;
+    color: #fff;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 3px
+}
+
+#loadPremadeButton:hover,.dice-roll-button:hover,.main-button:hover {
+    background-color: #45a049
+}
+
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto
+}
+
+.skill {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255,255,255,.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px
+}
+
+.skill-name {
+    font-weight: 700
+}
+
+.skill-attribute {
+    font-style: italic;
+    font-size: .9em
+}
+
+.skill button {
+    width: 100%;
+    margin-top: 5px
+}
+
+#loadPremadeButton {
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 5px
+}
+
+.main-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px
+}
+
+.main-button {
+    background-color: #4caf50;
+    border: 0;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color .3s
+}
+
+#deleteButton {
+    background-color: #f44336
+}
+
+#deleteButton:hover {
+    background-color: #d32f2f
+}
+
+#fileInput {
+    display: none
+}
+
+.feat-header,.feat-item,.spell-header,.spell-item {
+    transition: background-color .3s ease
+}
+
+.feat-header,.spell-header {
+    font-weight: 700
+}
+
+.feat-header:hover,.spell-header:hover {
+    background-color: rgba(200,200,200,.8)
+}
+
+.feat-content,.spell-content {
+    background-color: rgba(255,255,255,.9);
+    border-top: 1px solid #ddd
+}
+
+.chevron {
+    transition: transform .3s ease
+}
+
+.feat-header[aria-expanded=true] .chevron,.spell-header[aria-expanded=true] .chevron {
+    transform: rotate(180deg)
+}
+
+.skills h3,.spells h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    color: #333
+}
+
+.feat-item p,.spell-item p {
+    margin: 5px 0
+}
+
+.feat-item strong,.spell-item strong {
+    color: #444
+}
+
+.feats-list {
+    display: block;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box
+}
+
+.feat-item {
+    width: 100%;
+    background-color: rgba(249,249,249,.8);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    overflow: hidden
+}
+
+.feat-effects {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: rgba(255,255,255,.1);
+    border-radius: 5px
+}
+
+.feat-effects h4 {
+    margin-top: 0;
+    margin-bottom: 10px
+}
+
+.feat-effects ul {
+    list-style-type: none;
+    padding-left: 0
+}
+
+.feat-effects li {
+    margin-bottom: 5px
+}
+
+.feat-enhanced {
+    color: #4caf50;
+    font-size: 1.2em;
+    vertical-align: super;
+    cursor: help
+}
+
+/* new shit */
+
+.character-card {
+    background-color: rgba(255, 255, 255, 0.7);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    width: 400px;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Updated styles for better readability in stacked view */
+  .character-card.stacked {
+    height: 75px;
+    overflow: hidden;
+  }
+  
+  

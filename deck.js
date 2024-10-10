@@ -55,27 +55,189 @@
         }
     }
 
+    // document.getElementById('openFileButton').addEventListener('click', () => {
+    //     document.getElementById('fileInput').click();
+    // });
+
+    // document.getElementById('fileInput').addEventListener('change', (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = (e) => {
+    //             try {
+    //                 const character = JSON.parse(e.target.result);
+    //                 character = recalculateCharacterAC(character);
+    //                 saveCharacterToLocalStorage(character);
+    //                 renderCharacterCard(character);
+    //             } catch (error) {
+    //                 showNotification('Error parsing JSON file');
+    //             }
+    //         };
+    //         reader.readAsText(file);
+    //     }
+    // });
+
     document.getElementById('openFileButton').addEventListener('click', () => {
         document.getElementById('fileInput').click();
     });
-
+    
     document.getElementById('fileInput').addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
-                    const character = JSON.parse(e.target.result);
-                    character = recalculateCharacterAC(character);
-                    saveCharacterToLocalStorage(character);
-                    renderCharacterCard(character);
+                    let character = processCharacterData(e.target.result);
+                    if (character) {
+                        character = recalculateCharacterAC(character);
+                        saveCharacterToLocalStorage(character);
+                        renderCharacterCard(character);
+                        showNotification('Character loaded successfully');
+                    }
                 } catch (error) {
-                    showNotification('Error parsing JSON file');
+                    console.error('Error processing character data:', error);
+                    showNotification('Error loading character file');
                 }
             };
             reader.readAsText(file);
         }
     });
+    
+    // function processCharacterData(data) {
+    //     let characterData;
+        
+    //     // Check if the data is a string (JSON) and parse it
+    //     if (typeof data === 'string') {
+    //         try {
+    //             characterData = JSON.parse(data);
+    //         } catch (error) {
+    //             console.error('Error parsing JSON:', error);
+    //             throw new Error('Invalid JSON format');
+    //         }
+    //     } else {
+    //         characterData = data;
+    //     }
+    
+    //     // Handle legacy format differences
+    //     if (characterData.skills) {
+    //         // Normalize skill names
+    //         const normalizedSkills = {};
+    //         for (let [key, value] of Object.entries(characterData.skills)) {
+    //             let normalizedKey = key.toLowerCase().replace(/\s+/g, '');
+    //             if (!normalizedSkills[normalizedKey]) {
+    //                 normalizedSkills[normalizedKey] = value;
+    //             }
+    //         }
+    //         characterData.skills = normalizedSkills;
+    //     }
+    
+    //     // Ensure spellcasting exists
+    //     if (!characterData.spellcasting) {
+    //         characterData.spellcasting = {
+    //             class: characterData.class,
+    //             ability: "",
+    //             spellSaveDC: 0,
+    //             spellAttackBonus: 0,
+    //             spells: [],
+    //             spellSlots: {},
+    //             currentSpellSlots: {}
+    //         };
+    //     }
+    
+    //     // Ensure feats array exists
+    //     if (!characterData.feats) {
+    //         characterData.feats = [];
+    //     }
+    
+    //     // Add any other necessary transformations here
+    
+    //     return characterData;
+    // }
+
+    function processCharacterData(data) {
+        let characterData;
+        
+        // Parse JSON if necessary
+        if (typeof data === 'string') {
+            try {
+                characterData = JSON.parse(data);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                throw new Error('Invalid JSON format');
+            }
+        } else {
+            characterData = data;
+        }
+    
+        // Detect version
+        const isNewVersion = 'version' in characterData;
+    
+        if (isNewVersion) {
+            // Process new version format
+            characterData.skills = normalizeSkills(characterData.skills);
+        } else {
+            // Process old version format
+            characterData.skills = convertOldSkillFormat(characterData.skills);
+        }
+    
+        // Ensure all skills are present
+        characterData.skills = ensureAllSkills(characterData.skills);
+    
+        // Common processing for both versions
+        if (!characterData.spellcasting) {
+            characterData.spellcasting = createDefaultSpellcasting(characterData);
+        }
+    
+        if (!characterData.feats) {
+            characterData.feats = [];
+        }
+    
+        return characterData;
+    }
+    
+    function normalizeSkills(skills) {
+        const normalizedSkills = {};
+        for (let [key, value] of Object.entries(skills)) {
+            let normalizedKey = key.toLowerCase().replace(/\s+/g, '');
+            normalizedSkills[normalizedKey] = value;
+        }
+        return normalizedSkills;
+    }
+    
+    function convertOldSkillFormat(oldSkills) {
+        const newSkills = {};
+        for (let [key, value] of Object.entries(oldSkills)) {
+            let newKey = key.toLowerCase().replace(/\s+/g, '');
+            newSkills[newKey] = {
+                proficient: value.proficient || false,
+                expertise: value.expertise || false,
+                bonus: value.bonus || 0
+            };
+        }
+        return newSkills;
+    }
+    
+    function ensureAllSkills(skills) {
+        GG_ALL_GAME_CONFIG.skillList.forEach(skill => {
+            const skillKey = skill.toLowerCase().replace(/\s+/g, '');
+            if (!skills[skillKey]) {
+                skills[skillKey] = { proficient: false, expertise: false, bonus: 0 };
+            }
+        });
+        return skills;
+    }
+    
+    function createDefaultSpellcasting(character) {
+        return {
+            class: character.class,
+            ability: "",
+            spellSaveDC: 0,
+            spellAttackBonus: 0,
+            spells: [],
+            spellSlots: {},
+            currentSpellSlots: {}
+        };
+    }
 
     document.getElementById('deleteButton').addEventListener('click', () => {
         const activeCard = document.querySelector('.character-card.active');
@@ -121,44 +283,119 @@
         });
     }
 
+    // function getBackgroundImage(character) {
+    //     const race = character.race.toLowerCase();
+    //     const characterClass = character.class.toLowerCase();
+    //     let raceInitial = race === 'dragonborn' ? 'db' : race === 'tabaxi' ? 'tb' : race === 'goliath' ? 'go' : race[0];
+    //     return `${raceInitial}-${characterClass}.jpg`;
+    // }
+
     function getBackgroundImage(character) {
+        const defaultImage = 'artwork.png';
+        
+        if (!character || !character.race || !character.class) {
+            console.warn('Invalid character data for background image');
+            return defaultImage;
+        }
+    
         const race = character.race.toLowerCase();
         const characterClass = character.class.toLowerCase();
         let raceInitial = race === 'dragonborn' ? 'db' : race === 'tabaxi' ? 'tb' : race === 'goliath' ? 'go' : race[0];
-        return `${raceInitial}-${characterClass}.jpg`;
+        const specificImage = `${raceInitial}-${characterClass}.jpg`;
+    
+        // Create an image object to test if the specific image exists
+        const img = new Image();
+        img.onerror = function() {
+            console.log(`Image ${specificImage} not found, using default.`);
+            character.backgroundImage = defaultImage;
+        };
+        img.onload = function() {
+            character.backgroundImage = specificImage;
+        };
+        img.src = specificImage;
+    
+        // Return the default image initially
+        return defaultImage;
     }
 
 
+
+
     function renderCharacterCard(character) {
+            // Ensure character data is properly structured
+    if (!character || typeof character !== 'object') {
+        console.error('Invalid character data:', character);
+        showNotification('Error: Invalid character data');
+        return;
+    }
+
+    // Ensure skills object exists
+    if (!character.skills || typeof character.skills !== 'object') {
+        console.warn('Skills data missing or invalid, initializing empty skills object');
+        character.skills = {};
+    }
+
         character = assignRandomFeats(character);
         saveCharacterToLocalStorage(character); // Save any changes made
 
         console.log("Character feats after assignment:", character.feats);
 
+        // const card = document.createElement('div');
+        // card.className = 'character-card stacked';
+        // card.dataset.character = JSON.stringify(character);
+        // card.dataset.name = character.name;
+        // card.style.backgroundImage = `url(${getBackgroundImage(character)})`;
+
         const card = document.createElement('div');
         card.className = 'character-card stacked';
         card.dataset.character = JSON.stringify(character);
         card.dataset.name = character.name;
-        card.style.backgroundImage = `url(${getBackgroundImage(character)})`;
+    
+        const initialBackgroundImage = getBackgroundImage(character);
+        card.style.backgroundImage = `url(${initialBackgroundImage})`;
 
-        const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
-            const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
-            const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
-            const proficient = character.skills[skill].proficient;
-            const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
-            const totalBonus = getModifier(attributeScore) + proficiencyBonus;
-            return `
-      <div class="skill">
-        <div class="skill-header">
-          <span class="skill-name">${skill}</span>
-          <span class="skill-attribute">(${attributeAbbr})</span>
-        </div>
-        <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
-          Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
-        </button>
-      </div>
-    `;
-        }).join('');
+    //     const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
+    //         const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
+    //         const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
+    //         const proficient = character.skills[skill].proficient;
+    //         const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
+    //         const totalBonus = getModifier(attributeScore) + proficiencyBonus;
+    //         return `
+    //   <div class="skill">
+    //     <div class="skill-header">
+    //       <span class="skill-name">${skill}</span>
+    //       <span class="skill-attribute">(${attributeAbbr})</span>
+    //     </div>
+    //     <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
+    //       Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
+    //     </button>
+    //   </div>
+    // `;
+    //     }).join('');
+
+    const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
+        const skillKey = skill.toLowerCase().replace(/\s+/g, '');
+        const skillData = character.skills[skillKey] || character.skills[skill] || { proficient: false, expertise: false, bonus: 0 };
+        
+        const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
+        const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
+        const proficient = skillData.proficient || false;
+        const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
+        const skillBonus = typeof skillData.bonus === 'number' ? skillData.bonus : 0;
+        const totalBonus = getModifier(attributeScore) + proficiencyBonus + skillBonus;
+
+        return `
+            <div class="skill">
+                <div class="skill-header">
+                    <span class="skill-name">${skill}</span>
+                    <span class="skill-attribute">(${attributeAbbr})</span>
+                </div>
+                <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
+                    Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
+                </button>
+            </div>
+        `;
+    }).join('');
 
         const featEffectsHtml = generateFeatEffectsHtml(character);
         console.log("Generated feats HTML:", featEffectsHtml);
@@ -267,6 +504,14 @@
         console.log("Character feats:", character.feats);
         console.log("Feats data:", window.featsData);
 
+
+        setTimeout(() => {
+            if (character.backgroundImage && character.backgroundImage !== initialBackgroundImage) {
+                card.style.backgroundImage = `url(${character.backgroundImage})`;
+            }
+        }, 100);
+    
+        return card;
 
     }
 
@@ -1079,7 +1324,8 @@ function renderSpellsSection(character) {
                 'Deva.json',
                 'Jasper.json',
                 'Jovah.json',
-                'Lark.json'
+                'Lark.json',
+                'Gregory.json'
             ];
 
             const characters = await Promise.all(premadeCharacters.map(async (file) => {

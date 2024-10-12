@@ -1,0 +1,603 @@
+{
+  "Aarakocra": {
+    "description": "Bird-like humanoids with the ability to fly.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "wisdom": 1
+      },
+      "size": "Medium",
+      "speed": 25,
+      "flyingSpeed": 50,
+      "talons": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Aarakocra", "Auran"]
+      }
+    }
+  },
+  "AirGenasi": {
+    "description": "Genasi infused with the power of air.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "dexterity": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "unburdendByArmor": true,
+      "mingleWithTheWind": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "BeasthideShifter": {
+    "description": "Shifters with enhanced toughness when shifting.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 1,
+        "constitution": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "shiftingTrait": true,
+      "beasthideShift": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common"]
+      }
+    }
+  },
+  "Changeling": {
+    "description": "Shapeshifters with the ability to alter their appearance at will.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "charisma": 2,
+        "choice": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "changelingInstincts": true,
+      "shapechangerTrait": true,
+      "changlingPersonas": true,
+      "proficiencies": {
+        "skills": ["Deception", "Insight"],
+        "languages": ["Common", "Two of your choice"]
+      }
+    }
+  },
+  "Dragonborn": {
+    "description": "Dragonborn look very much like dragons standing erect in humanoid form, though they lack wings or a tail.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "strength": 2,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "draconicAncestry": "Choose one type of dragon as your ancestor. Your breath weapon and damage resistance are determined by the dragon type",
+      "breathWeapon": "You can use your action to exhale destructive energy",
+      "damageResistance": "You have resistance to the damage type associated with your draconic ancestry",
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Draconic"]
+      }
+    }
+  },
+  "Dwarf": {
+    "description": "Bold and hardy, dwarves are known as skilled warriors, miners, and workers of stone and metal.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2
+      },
+      "size": "Medium",
+      "speed": 25,
+      "darkvision": 60,
+      "dwarvenResilience": "Advantage on saving throws against poison, and resistance against poison damage",
+      "dwarvenCombatTraining": "Proficiency with battleaxe, handaxe, light hammer, and warhammer",
+      "toolProficiency": "Proficiency with one set of artisan's tools of your choice",
+      "stonecunning": "Add double proficiency bonus to Intelligence (History) checks related to the origin of stonework",
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Dwarvish"]
+      }
+    }
+  },
+  "EarthGenasi": {
+    "description": "Genasi infused with the power of earth.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "strength": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "earthWalk": true,
+      "mergeWithStone": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "Elf": {
+    "description": "Elves are a magical people of otherworldly grace, living in the world but not entirely part of it.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": 60,
+      "keenSenses": "Proficiency in the Perception skill",
+      "feyAncestry": "Advantage on saving throws against being charmed, and magic can't put you to sleep",
+      "trance": "Elves don't need to sleep. Instead, they meditate deeply for 4 hours a day",
+      "proficiencies": {
+        "skills": ["Perception"],
+        "languages": ["Common", "Elvish"]
+      }
+    }
+  },
+  "Fairy": {
+    "description": "Magical, diminutive creatures with the ability to fly.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "choice": 1
+      },
+      "size": "Small",
+      "speed": 30,
+      "flyingSpeed": 30,
+      "fairyMagic": true,
+      "flightTrait": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Sylvan"]
+      }
+    }
+  },
+  "FireGenasi": {
+    "description": "Genasi infused with the power of fire.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "intelligence": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "fireResistance": true,
+      "reachToTheBlaze": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "Genasi": {
+    "description": "Humanoids infused with elemental energy.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "elementalResistance": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "Gnome": {
+    "description": "A gnome's energy and enthusiasm for living shines through every inch of his or her tiny body.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "intelligence": 2
+      },
+      "size": "Small",
+      "speed": 25,
+      "darkvision": 60,
+      "gnomeCunning": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic",
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Gnomish"]
+      }
+    }
+  },
+  "Goliath": {
+    "description": "Large, athletic humanoids with a penchant for competition and survival.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "strength": 2,
+        "constitution": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "naturalAthlete": true,
+      "stonesEndurance": true,
+      "powerfulBuild": true,
+      "proficiencies": {
+        "skills": ["Athletics"],
+        "languages": ["Common", "Giant"]
+      }
+    }
+  },
+  "Half-Elf": {
+    "description": "Half-elves combine what some say are the best qualities of their elf and human parents.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "charisma": 2,
+        "other": "Increase two other ability scores of your choice by 1"
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": 60,
+      "feyAncestry": "You have advantage on saving throws against being charmed, and magic can't put you to sleep",
+      "skillVersatility": "You gain proficiency in two skills of your choice",
+      "proficiencies": {
+        "skills": ["Choice", "Choice"],
+        "languages": ["Common", "Elvish", "One extra language of your choice"]
+      }
+    }
+  },
+  "Half-Orc": {
+    "description": "Half-orcs' grayish pigmentation, sloping foreheads, jutting jaws, prominent teeth, and towering builds make their orcish heritage plain for all to see.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "strength": 2,
+        "constitution": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": 60,
+      "menacing": "You gain proficiency in the Intimidation skill",
+      "relentlessEndurance": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest",
+      "savageAttacks": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit",
+      "proficiencies": {
+        "skills": ["Intimidation"],
+        "languages": ["Common", "Orc"]
+      }
+    }
+  },
+  "Halfling": {
+    "description": "The diminutive halflings survive in a world full of larger creatures by avoiding notice or, barring that, avoiding offense.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2
+      },
+      "size": "Small",
+      "speed": 25,
+      "lucky": "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die",
+      "brave": "You have advantage on saving throws against being frightened",
+      "halflingNimbleness": "You can move through the space of any creature that is of a size larger than yours",
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Halfling"]
+      }
+    }
+  },
+  "Hobgoblin": {
+    "description": "Disciplined and militaristic goblinoids with a strong sense of duty.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "intelligence": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "martialTraining": true,
+      "savingFace": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Goblin"]
+      }
+    }
+  },
+  "Human": {
+    "description": "Humans are the most adaptable and ambitious people among the common races. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "strength": 1,
+        "dexterity": 1,
+        "constitution": 1,
+        "intelligence": 1,
+        "wisdom": 1,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "One extra language of your choice"]
+      }
+    }
+  },
+  "Kalashtar": {
+    "description": "Humans bound with quori spirits, possessing psychic abilities.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "wisdom": 2,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "dualMind": true,
+      "mentalDiscipline": true,
+      "mindLink": true,
+      "severedFromDreams": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Quori", "One other language of your choice"]
+      }
+    }
+  },
+  "Kenku": {
+    "description": "Avian humanoids with a talent for mimicry but cursed to be flightless.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "wisdom": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "expertForgery": true,
+      "mimicry": true,
+      "kenkuTraining": true,
+      "proficiencies": {
+        "skills": ["Acrobatics", "Stealth"],
+        "languages": ["Common", "Auran"]
+      }
+    }
+  },
+  "Kender": {
+    "description": "Inquisitive and fearless small humanoids from the Dragonlance world, known for their curiosity and taunting nature.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "charisma": 1,
+        "dexterity": 2
+      },
+      "size": "Small",
+      "speed": 30,
+      "darkvision": 60,
+      "fearless": true,
+      "taunt": {
+        "description": "You can use your bonus action to force a creature within 60 feet to make a Wisdom saving throw. If they fail, they have disadvantage on attacks that aren't directed at you.",
+        "saveDC": "Based on Charisma"
+      },
+      "proficiencies": {
+        "skills": ["Sleight of Hand"],
+        "languages": ["Common", "Gnomish", "Dwarvish", "Halfling"]
+      }
+    }
+  },
+  "LongtoothShifter": {
+    "description": "Shifters with enhanced biting capabilities when shifting.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 1,
+        "strength": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "shiftingTrait": true,
+      "longtoothShift": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common"]
+      }
+    }
+  },
+"Owlin": {
+    "description": "Owl-like humanoids with natural flying abilities.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "choice": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "flyingSpeed": 30,
+      "darkvision": true,
+      "silentFeathers": true,
+      "keenHearing": true,
+      "proficiencies": {
+        "skills": ["Stealth"],
+        "languages": ["Common", "One of your choice"]
+      }
+    }
+  },
+  "PallidElf": {
+    "description": "Subterranean elves with enhanced perception and stealth abilities.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "wisdom": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "feyAncestry": true,
+      "keenSenses": true,
+      "incisiveSense": true,
+      "blessedByTheMoonweaver": true,
+      "proficiencies": {
+        "skills": ["Investigation", "Insight"],
+        "languages": ["Common", "Elvish", "One of your choice"]
+      }
+    }
+  },
+  "SeaElf": {
+    "description": "Aquatic elves adapted to life beneath the waves.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "constitution": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "swimSpeed": 30,
+      "darkvision": true,
+      "feyAncestry": true,
+      "keenSenses": true,
+      "seaElvesTraining": true,
+      "childOfTheSea": true,
+      "friendOfTheSea": true,
+      "proficiencies": {
+        "skills": ["Perception"],
+        "languages": ["Common", "Elvish", "Aquan"]
+      }
+    }
+  },
+  "Shifter": {
+    "description": "Descendants of humans and lycanthropes with the ability to partially shift form.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "shiftingTrait": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common"]
+      }
+    }
+  },
+  "SwiftstrideShifter": {
+    "description": "Shifters with enhanced speed and agility when shifting.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "shiftingTrait": true,
+      "swiftstrideShift": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common"]
+      }
+    }
+  },
+  "Tabaxi": {
+    "description": "Feline humanoids with natural agility and curiosity.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "dexterity": 2,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "felineAgility": true,
+      "catClaws": true,
+      "catsTalents": true,
+      "proficiencies": {
+        "skills": ["Perception", "Stealth"],
+        "languages": ["Common", "One of your choice"]
+      }
+    }
+  },
+  "Tiefling": {
+    "description": "To be greeted with stares and whispers, to suffer violence and insult on the street, to see mistrust and fear in every eye: this is the lot of the tiefling.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "intelligence": 1,
+        "charisma": 2
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": 60,
+      "hellishResistance": "You have resistance to fire damage",
+      "infernalLegacy": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell once per day as a 2nd-level spell. Once you reach 5th level, you can also cast the darkness spell once per day. Charisma is your spellcasting ability for these spells",
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Infernal"]
+      }
+    }
+  },
+  "Triton": {
+    "description": "Amphibious humanoids from the depths of the sea.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "strength": 1,
+        "constitution": 1,
+        "charisma": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "swimSpeed": 30,
+      "amphibious": true,
+      "controlAirAndWater": true,
+      "emissaryOfTheSea": true,
+      "guardianOfTheDepths": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "Warforged": {
+    "description": "Constructed beings created for war, blending living and mechanical parts.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "choice": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "constructedResilience": true,
+      "sentryRest": true,
+      "integratedProtection": true,
+      "specializedDesign": true,
+      "proficiencies": {
+        "skills": ["One skill of your choice"],
+        "languages": ["Common", "One of your choice"]
+      }
+    }
+  },
+  "WaterGenasi": {
+    "description": "Genasi infused with the power of water.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "constitution": 2,
+        "wisdom": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "swimSpeed": 30,
+      "acidResistance": true,
+      "callToTheWave": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Primordial"]
+      }
+    }
+  },
+  "YuanTiPureblood": {
+    "description": "Snake-like humanoids with innate magical abilities.",
+    "traits": {
+      "abilityScoreIncrease": {
+        "charisma": 2,
+        "intelligence": 1
+      },
+      "size": "Medium",
+      "speed": 30,
+      "darkvision": true,
+      "innateSpellcasting": true,
+      "magicResistance": true,
+      "poisonImmunity": true,
+      "proficiencies": {
+        "skills": [],
+        "languages": ["Common", "Abyssal", "Draconic"]
+      }
+    }
+  }
+}

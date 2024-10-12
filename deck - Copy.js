@@ -44,7 +44,7 @@
     let weaponsData = [];
     let armorData = [];
     let premadeCharactersLoaded = false;
-    let racesData = {};
+
 
     async function loadSpellsData() {
         try {
@@ -103,7 +103,57 @@
         }
     });
     
- 
+    // function processCharacterData(data) {
+    //     let characterData;
+        
+    //     // Check if the data is a string (JSON) and parse it
+    //     if (typeof data === 'string') {
+    //         try {
+    //             characterData = JSON.parse(data);
+    //         } catch (error) {
+    //             console.error('Error parsing JSON:', error);
+    //             throw new Error('Invalid JSON format');
+    //         }
+    //     } else {
+    //         characterData = data;
+    //     }
+    
+    //     // Handle legacy format differences
+    //     if (characterData.skills) {
+    //         // Normalize skill names
+    //         const normalizedSkills = {};
+    //         for (let [key, value] of Object.entries(characterData.skills)) {
+    //             let normalizedKey = key.toLowerCase().replace(/\s+/g, '');
+    //             if (!normalizedSkills[normalizedKey]) {
+    //                 normalizedSkills[normalizedKey] = value;
+    //             }
+    //         }
+    //         characterData.skills = normalizedSkills;
+    //     }
+    
+    //     // Ensure spellcasting exists
+    //     if (!characterData.spellcasting) {
+    //         characterData.spellcasting = {
+    //             class: characterData.class,
+    //             ability: "",
+    //             spellSaveDC: 0,
+    //             spellAttackBonus: 0,
+    //             spells: [],
+    //             spellSlots: {},
+    //             currentSpellSlots: {}
+    //         };
+    //     }
+    
+    //     // Ensure feats array exists
+    //     if (!characterData.feats) {
+    //         characterData.feats = [];
+    //     }
+    
+    //     // Add any other necessary transformations here
+    
+    //     return characterData;
+    // }
+
     function processCharacterData(data) {
         let characterData;
         
@@ -120,18 +170,14 @@
         }
     
         // Detect version
-        const version = characterData.version || 2;  // Default to version 2 if not specified
+        const isNewVersion = 'version' in characterData;
     
-        if (version >= 3) {
-            // Process version 3+ format
+        if (isNewVersion) {
+            // Process new version format
             characterData.skills = normalizeSkills(characterData.skills);
-            characterData.languages = characterData.languages || [];
-            characterData.racialAbilities = characterData.racialAbilities || [];
         } else {
             // Process old version format
             characterData.skills = convertOldSkillFormat(characterData.skills);
-            characterData.languages = [];  // Initialize languages array
-            characterData.racialAbilities = [];  // Initialize racial abilities array
         }
     
         // Ensure all skills are present
@@ -146,11 +192,6 @@
             characterData.feats = [];
         }
     
-        // Add proficiency bonus if not present
-        if (!characterData.proficiencyBonus) {
-            characterData.proficiencyBonus = Math.ceil(characterData.level / 4) + 1;
-        }
-    
         return characterData;
     }
     
@@ -158,11 +199,7 @@
         const normalizedSkills = {};
         for (let [key, value] of Object.entries(skills)) {
             let normalizedKey = key.toLowerCase().replace(/\s+/g, '');
-            normalizedSkills[normalizedKey] = {
-                proficient: value.proficient || false,
-                expertise: value.expertise || false,
-                bonus: value.bonus || 0
-            };
+            normalizedSkills[normalizedKey] = value;
         }
         return normalizedSkills;
     }
@@ -220,22 +257,9 @@
         let characters = JSON.parse(localStorage.getItem('characters') || '[]');
         const index = characters.findIndex(c => c.name === character.name);
         if (index !== -1) {
-            characters[index] = {
-                ...characters[index],
-                ...character,
-                version: 3,  // Update version number
-                languages: character.languages || [],
-                racialAbilities: character.racialAbilities || [],
-                proficiencyBonus: character.proficiencyBonus || Math.ceil(character.level / 4) + 1
-            };
+            characters[index] = character;
         } else {
-            characters.push({
-                ...character,
-                version: 3,  // Set version number for new characters
-                languages: character.languages || [],
-                racialAbilities: character.racialAbilities || [],
-                proficiencyBonus: character.proficiencyBonus || Math.ceil(character.level / 4) + 1
-            });
+            characters.push(character);
         }
         localStorage.setItem('characters', JSON.stringify(characters));
         console.log(`Saved updated character data for ${character.name}`);
@@ -259,243 +283,69 @@
         });
     }
 
+    // function getBackgroundImage(character) {
+    //     const race = character.race.toLowerCase();
+    //     const characterClass = character.class.toLowerCase();
+    //     let raceInitial = race === 'dragonborn' ? 'db' : race === 'tabaxi' ? 'tb' : race === 'goliath' ? 'go' : race[0];
+    //     return `${raceInitial}-${characterClass}.jpg`;
+    // }
+
     function getBackgroundImage(character) {
         const defaultImage = 'artwork.png';
         
-        console.log('Character data received:', JSON.stringify(character, null, 2));
-    
-        if (!character) {
-            console.warn('Character object is null or undefined');
+        if (!character || !character.race || !character.class) {
+            console.warn('Invalid character data for background image');
             return defaultImage;
         }
     
-        let race, characterClass;
-    
-        // Handle potential new JSON format
-        if (character.race && typeof character.race === 'object') {
-            race = character.race.name || character.race.fullName;
-        } else {
-            race = character.race;
-        }
-    
-        if (character.class && typeof character.class === 'object') {
-            characterClass = character.class.name;
-        } else {
-            characterClass = character.class;
-        }
-    
-        console.log('Extracted race:', race);
-        console.log('Extracted class:', characterClass);
-    
-        if (!race || !characterClass) {
-            console.warn('Unable to extract race or class from character data');
-            return defaultImage;
-        }
-    
-        race = race.toLowerCase();
-        characterClass = characterClass.toLowerCase();
-    
-        let raceInitial = race === 'dragonborn' ? 'db' : 
-                          race === 'tabaxi' ? 'tb' : 
-                          race === 'goliath' ? 'go' : 
-                          race[0];
+        const race = character.race.toLowerCase();
+        const characterClass = character.class.toLowerCase();
+        let raceInitial = race === 'dragonborn' ? 'db' : race === 'tabaxi' ? 'tb' : race === 'goliath' ? 'go' : race[0];
         const specificImage = `${raceInitial}-${characterClass}.jpg`;
     
-        console.log(`Attempting to load background image: ${specificImage}`);
-    
-        // Check if the specific image exists
+        // Create an image object to test if the specific image exists
         const img = new Image();
         img.onerror = function() {
             console.log(`Image ${specificImage} not found, using default.`);
             character.backgroundImage = defaultImage;
         };
         img.onload = function() {
-            console.log(`Image ${specificImage} loaded successfully.`);
             character.backgroundImage = specificImage;
         };
         img.src = specificImage;
     
-        // Return the default image initially, it will be updated if the specific image loads
+        // Return the default image initially
         return defaultImage;
     }
 
 
 
 
-    // function renderCharacterCard(character) {
-    //     character = assignRandomFeats(character);
-    //     saveCharacterToLocalStorage(character);
-    
-    //     console.log("Character feats after assignment:", character.feats);
-    
-    //     const card = document.createElement('div');
-    //     card.className = 'character-card stacked';
-    //     card.dataset.character = JSON.stringify(character);
-    //     card.dataset.name = character.name;
-    
-    //     const initialBackgroundImage = getBackgroundImage(character);
-    //     card.style.backgroundImage = `url(${initialBackgroundImage})`;
-    
-    //     const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
-    //         const skillKey = skill.toLowerCase().replace(/\s+/g, '');
-    //         const skillData = character.skills[skillKey] || { proficient: false, expertise: false, bonus: 0 };
-            
-    //         const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
-    //         const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
-    //         const proficiencyBonus = skillData.proficient ? character.proficiencyBonus : 0;
-    //         const expertiseBonus = skillData.expertise ? character.proficiencyBonus : 0;
-    //         const totalBonus = getModifier(attributeScore) + proficiencyBonus + expertiseBonus + skillData.bonus;
-    
-    //         const proficiencyMarker = skillData.proficient ? '•' : '';
-    //         const expertiseMarker = skillData.expertise ? '••' : '';
-    
-    //         return `
-    //             <div class="skill">
-    //                 <div class="skill-header">
-    //                     <span class="skill-name">${skill}${proficiencyMarker}${expertiseMarker}</span>
-    //                     <span class="skill-attribute">(${attributeAbbr})</span>
-    //                 </div>
-    //                 <button onclick="rollSkill('${skill}', ${totalBonus}, ${skillData.proficient}, '${attributeAbbr}')">
-    //                     Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
-    //                 </button>
-    //             </div>
-    //         `;
-    //     }).join('');
-    
-    //     const featEffectsHtml = generateFeatEffectsHtml(character);
-    //     console.log("Generated feats HTML:", featEffectsHtml);
-    
-    //     const otherInfoHtml = `
-    //         <div class="other-info">
-    //             <h3>Languages</h3>
-    //             <ul>${character.languages.map(lang => `<li>${lang}</li>`).join('')}</ul>
-    //             <h3>Racial Abilities</h3>
-    //             <ul>${character.racialAbilities.map(ability => `<li>${ability}</li>`).join('')}</ul>
-    //         </div>
-    //     `;
-    
-    //     card.innerHTML = `
-    //         <button class="close-button" onclick="returnCardToDeck(this)">
-    //             <span class="material-icons">close</span>
-    //         </button>
-    //         <h2>${character.name}</h2>
-    //         <p>${character.race} Lvl:${character.level} ${character.class} (${character.subclass})</p>
-    //         <div class="character-actions">
-    //             <button class="action-button initiative-button" onclick="rollInitiative(this, ${getModifier(character.abilityScores.dexterity)})">
-    //                 <span class="material-icons">casino</span> Initiative
-    //             </button>
-    //             <button class="action-button long-rest-button" onclick="performLongRest(this)">
-    //                 <span class="material-icons">hotel</span> Long Rest
-    //             </button>
-    //             <button class="action-button short-rest-button" onclick="performShortRest(this)">
-    //                 <span class="material-icons">coffee</span> Short Rest
-    //             </button>
-    //         </div>
-    //         <p>HP: <span class="hp-value">${character.hp}</span>/<span class="max-hp-value">${character.maxHp}</span> | AC: <span class="ac-value">${character.ac}</span>
-    //         <span class="hp-controls">
-    //             <button onclick="changeHP(this, -1)"><span class="material-icons">remove</span></button>
-    //             <input type="number" value="1" min="1" max="100" onchange="updateHPChange(this)">
-    //             <button onclick="changeHP(this, 1)"><span class="material-icons">add</span></button>
-    //         </span>
-    //         <button class="add-item-button" onclick="showAddItemModal(this)">
-    //             <span class="material-icons">add_box</span> Add Item
-    //         </button>
-    //         </p>
-    //         <div class="view-buttons">
-    //             <button class="active" onclick="changeView(this, 'attributes')">Attributes</button>
-    //             <button onclick="changeView(this, 'skills')">Skills</button>
-    //             <button onclick="changeView(this, 'inventory')">Inventory</button>
-    //             <button onclick="changeView(this, 'spells')">Spells</button>
-    //             <button onclick="changeView(this, 'feats')">Feats</button>
-    //             <button onclick="changeView(this, 'other')">Other</button>
-    //         </div>
-    //         <div class="attributes">
-    //             ${GG_ALL_GAME_CONFIG.attributeAbbreviations.map(attr => `
-    //                 <div class="attribute">
-    //                     <strong>${attr}</strong><br>
-    //                     <button onclick="rollAttribute('${attr}', ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]})">
-    //                         ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]}
-    //                     </button><br>
-    //                     ${getModifierString(character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]])}
-    //                 </div>
-    //             `).join('')}
-    //         </div>
-    //         <div class="skills" style="display: none;">
-    //             <div class="skills-container">
-    //                 ${skillsHtml}
-    //             </div>
-    //         </div>
-    //         <div class="inventory" style="display: none;">
-    //             <h3>Weapons</h3>
-    //             <div class="weapons-list inventory-grid"></div>
-    //             <h3>Armor</h3>
-    //             <div class="armor-list inventory-grid"></div>
-    //             <h3>Other Items</h3>
-    //             <div class="items-list inventory-grid"></div>
-    //         </div>
-    //         <div class="spells" style="display: none;">
-    //             ${renderSpellsSection(character)}
-    //         </div>
-    //         <div class="feats" style="display: none;">
-    //             ${featEffectsHtml}
-    //             <h3>Feats List</h3>
-    //             <div class="feats-list">
-    //                 ${character.feats.map(featName => {
-    //                     const feat = window.featsData.find(f => f.name === featName);
-    //                     if (!feat) return '';
-    //                     return `
-    //                         <div class="feat-item">
-    //                             <div class="feat-header" onclick="toggleFeatDetails(this)">
-    //                                 <span>${feat.name}</span>
-    //                                 <span class="material-icons chevron">expand_more</span>
-    //                             </div>
-    //                             <div class="feat-content">
-    //                                 <p><strong>Applies to:</strong> ${feat.appliesTo}</p>
-    //                                 <p><strong>Level:</strong> ${feat.level}</p>
-    //                                 <p>${feat.description}</p>
-    //                             </div>
-    //                         </div>
-    //                     `;
-    //                 }).join('')}
-    //             </div>
-    //         </div>
-    //         <div class="other" style="display: none;">
-    //             ${otherInfoHtml}
-    //         </div>
-    //     `;
-    
-    //     const logBox = document.createElement('div');
-    //     logBox.className = 'log-box';
-    //     card.appendChild(logBox);
-    
-    //     document.getElementById('characterStack').appendChild(card);
-    //     characterCards.push(card);
-    //     updateCardPositions();
-    //     updateInventoryDisplay(card, character);
-    
-    //     card.addEventListener('click', (event) => {
-    //         if (!event.target.closest('.close-button')) {
-    //             activateCard(card);
-    //         }
-    //     });
-    
-    //     console.log("Character feats:", character.feats);
-    //     console.log("Feats data:", window.featsData);
-    
-    //     setTimeout(() => {
-    //         if (character.backgroundImage && character.backgroundImage !== initialBackgroundImage) {
-    //             card.style.backgroundImage = `url(${character.backgroundImage})`;
-    //         }
-    //     }, 100);
-    
-    //     return card;
-    // }
     function renderCharacterCard(character) {
+            // Ensure character data is properly structured
+    if (!character || typeof character !== 'object') {
+        console.error('Invalid character data:', character);
+        showNotification('Error: Invalid character data');
+        return;
+    }
+
+    // Ensure skills object exists
+    if (!character.skills || typeof character.skills !== 'object') {
+        console.warn('Skills data missing or invalid, initializing empty skills object');
+        character.skills = {};
+    }
+
         character = assignRandomFeats(character);
-        saveCharacterToLocalStorage(character);
-    
-        console.log("Rendering character card for:", character.name);
-    
+        saveCharacterToLocalStorage(character); // Save any changes made
+
+        console.log("Character feats after assignment:", character.feats);
+
+        // const card = document.createElement('div');
+        // card.className = 'character-card stacked';
+        // card.dataset.character = JSON.stringify(character);
+        // card.dataset.name = character.name;
+        // card.style.backgroundImage = `url(${getBackgroundImage(character)})`;
+
         const card = document.createElement('div');
         card.className = 'character-card stacked';
         card.dataset.character = JSON.stringify(character);
@@ -503,197 +353,194 @@
     
         const initialBackgroundImage = getBackgroundImage(character);
         card.style.backgroundImage = `url(${initialBackgroundImage})`;
-    
-    
-        const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
-            const skillKey = skill.toLowerCase().replace(/\s+/g, '');
-            const skillData = character.skills[skillKey] || { proficient: false, expertise: false, bonus: 0 };
-            
-            const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
-            const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
-            const proficiencyBonus = skillData.proficient ? character.proficiencyBonus : 0;
-            const expertiseBonus = skillData.expertise ? character.proficiencyBonus : 0;
-            const totalBonus = getModifier(attributeScore) + proficiencyBonus + expertiseBonus + skillData.bonus;
-    
-            const proficiencyMarker = skillData.proficient ? '•' : '';
-            const expertiseMarker = skillData.expertise ? '••' : '';
-    
-            return `
-                <div class="skill">
-                    <div class="skill-header">
-                        <span class="skill-name">${skill}${proficiencyMarker}${expertiseMarker}</span>
-                        <span class="skill-attribute">(${attributeAbbr})</span>
-                    </div>
-                    <button onclick="rollSkill('${skill}', ${totalBonus}, ${skillData.proficient}, '${attributeAbbr}')">
-                        Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
-                    </button>
+
+    //     const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
+    //         const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
+    //         const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
+    //         const proficient = character.skills[skill].proficient;
+    //         const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
+    //         const totalBonus = getModifier(attributeScore) + proficiencyBonus;
+    //         return `
+    //   <div class="skill">
+    //     <div class="skill-header">
+    //       <span class="skill-name">${skill}</span>
+    //       <span class="skill-attribute">(${attributeAbbr})</span>
+    //     </div>
+    //     <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
+    //       Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
+    //     </button>
+    //   </div>
+    // `;
+    //     }).join('');
+
+    const skillsHtml = GG_ALL_GAME_CONFIG.skillList.map(skill => {
+        const skillKey = skill.toLowerCase().replace(/\s+/g, '');
+        const skillData = character.skills[skillKey] || character.skills[skill] || { proficient: false, expertise: false, bonus: 0 };
+        
+        const attributeAbbr = GG_ALL_GAME_CONFIG.skillToAttributeMap[skill];
+        const attributeScore = character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attributeAbbr]];
+        const proficient = skillData.proficient || false;
+        const proficiencyBonus = proficient ? character.proficiencyBonus : 0;
+        const skillBonus = typeof skillData.bonus === 'number' ? skillData.bonus : 0;
+        const totalBonus = getModifier(attributeScore) + proficiencyBonus + skillBonus;
+
+        return `
+            <div class="skill">
+                <div class="skill-header">
+                    <span class="skill-name">${skill}</span>
+                    <span class="skill-attribute">(${attributeAbbr})</span>
                 </div>
-            `;
-        }).join('');
-    
+                <button onclick="rollSkill('${skill}', ${totalBonus}, ${proficient}, '${attributeAbbr}')">
+                    Roll (${totalBonus >= 0 ? '+' : ''}${totalBonus})
+                </button>
+            </div>
+        `;
+    }).join('');
+
         const featEffectsHtml = generateFeatEffectsHtml(character);
         console.log("Generated feats HTML:", featEffectsHtml);
-    
-        // Use races data for missing information
-        const raceInfo = racesData[character.race] || {};
-        const racialTraits = raceInfo.traits || {};
-    
-        const languagesHtml = `
-            <h3>Languages</h3>
-            <ul>
-                ${(character.languages || racialTraits.languages || []).map(lang => `<li>${lang}</li>`).join('')}
-            </ul>
-        `;
-    
-        const racialAbilitiesHtml = `
-            <h3>Racial Traits</h3>
-            <ul>
-                ${Object.entries(racialTraits)
-                    .filter(([key, _]) => key !== 'abilityScoreIncrease' && key !== 'languages')
-                    .map(([key, value]) => `<li><strong>${key}:</strong> ${stringifyTraitValue(value)}</li>`)
-                    .join('')}
-            </ul>
-        `;
-    
-        const otherInfoHtml = `
-            <div class="other-info">
-                ${languagesHtml}
-                ${racialAbilitiesHtml}
-            </div>
-        `;
-    
+
         card.innerHTML = `
-            <button class="close-button" onclick="returnCardToDeck(this)">
-                <span class="material-icons">close</span>
-            </button>
-            <h2>${character.name}</h2>
-            <p>${character.race} Lvl:${character.level} ${character.class} (${character.subclass || ''})</p>
-            <div class="character-actions">
-        <button class="action-button initiative-button" onclick="rollInitiative(this, ${getModifier(character.abilityScores.dexterity)})">
-            <i class="fas fa-dice-d20"></i> Initiative
-        </button>
-        <button class="action-button long-rest-button" onclick="performLongRest(this)">
-            <i class="fas fa-bed"></i> Long Rest
-        </button>
-        <button class="action-button short-rest-button" onclick="performShortRest(this)">
-            <i class="fas fa-coffee"></i> Short Rest
-        </button>
+    <button class="close-button" onclick="returnCardToDeck(this)">
+      <span class="material-icons">close</span>
+    </button>
+    <h2>${character.name}</h2>
+    <p>${character.race} Lvl:${character.level} ${character.class} (${character.subclass})</p>
+    <div class="character-actions">
+      <button class="action-button initiative-button" onclick="rollInitiative(this, ${getModifier(character.abilityScores.dexterity)})">
+        <span class="material-icons">casino</span> Initiative
+      </button>
+      <button class="action-button long-rest-button" onclick="performLongRest(this)">
+        <span class="material-icons">hotel</span> Long Rest
+      </button>
+      <button class="action-button short-rest-button" onclick="performShortRest(this)">
+        <span class="material-icons">coffee</span> Short Rest
+      </button>
     </div>
-            <p>HP: <span class="hp-value">${character.hp}</span>/<span class="max-hp-value">${character.maxHp}</span> | AC: <span class="ac-value">${character.ac}</span>
-            <span class="hp-controls">
-                <button onclick="changeHP(this, -1)"><span class="material-icons">remove</span></button>
-                <input type="number" value="1" min="1" max="100" onchange="updateHPChange(this)">
-                <button onclick="changeHP(this, 1)"><span class="material-icons">add</span></button>
-            </span>
-            <button class="add-item-button" onclick="showAddItemModal(this)">
-                <span class="material-icons">add_box</span> Add Item
-            </button>
-            </p>
-            <div class="view-buttons">
-        <button class="active" onclick="changeView(this, 'attributes')" title="Attributes"><i class="fas fa-user"></i></button>
-        <button onclick="changeView(this, 'skills')" title="Skills"><i class="fas fa-tools"></i></button>
-        <button onclick="changeView(this, 'inventory')" title="Inventory"><i class="fas fa-suitcase"></i></button>
-        <button onclick="changeView(this, 'spells')" title="Spells"><i class="fas fa-magic"></i></button>
-        <button onclick="changeView(this, 'feats')" title="Feats"><i class="fas fa-award"></i></button>
-        <button onclick="changeView(this, 'other')" title="Other"><i class="fas fa-ellipsis-h"></i></button>
+    <p>HP: <span class="hp-value">${character.hp}</span>/<span class="max-hp-value">${character.maxHp}</span> | AC: <span class="ac-value">${character.ac}</span>
+    <span class="hp-controls">
+      <button onclick="changeHP(this, -1)"><span class="material-icons">remove</span></button>
+      <input type="number" value="1" min="1" max="100" onchange="updateHPChange(this)">
+      <button onclick="changeHP(this, 1)"><span class="material-icons">add</span></button>
+    </span>
+    <button class="add-item-button" onclick="showAddItemModal(this)">
+      <span class="material-icons">add_box</span> Add Item
+    </button>
+    </p>
+    <div class="view-buttons">
+      <button class="active" onclick="changeView(this, 'attributes')">Attributes</button>
+      <button onclick="changeView(this, 'skills')">Skills</button>
+      <button onclick="changeView(this, 'inventory')">Inventory</button>
+      <button onclick="changeView(this, 'spells')">Spells</button>
+      <button onclick="changeView(this, 'feats')">Feats</button>
     </div>
-            <div class="attributes">
-                ${GG_ALL_GAME_CONFIG.attributeAbbreviations.map(attr => `
-                    <div class="attribute">
-                        <strong>${attr}</strong><br>
-                        <button onclick="rollAttribute('${attr}', ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]})">
-                            ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]}
-                        </button><br>
-                        ${getModifierString(character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]])}
-                    </div>
-                `).join('')}
+<div class="attributes">
+  ${GG_ALL_GAME_CONFIG.attributeAbbreviations.map(attr => `
+    <div class="attribute">
+      <strong>${attr}</strong><br>
+      <button onclick="rollAttribute('${attr}', ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]})">
+        ${character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]]}
+      </button><br>
+      ${getModifierString(character.abilityScores[GG_ALL_GAME_CONFIG.attributeFullNames[attr]])}
+    </div>
+  `).join('')}
+</div>
+    <div class="skills" style="display: none;">
+      <div class="skills-container">
+        ${skillsHtml}
+      </div>
+    </div>
+    <div class="inventory" style="display: none;">
+      <h3>Weapons</h3>
+      <div class="weapons-list inventory-grid"></div>
+      <h3>Armor</h3>
+      <div class="armor-list inventory-grid"></div>
+      <h3>Other Items</h3>
+      <div class="items-list inventory-grid"></div>
+    </div>
+    <div class="spells" style="display: none;">
+      ${renderSpellsSection(character)}
+    </div>
+    <div class="feats" style="display: none;">
+      ${featEffectsHtml}
+      <h3>Feats List</h3>
+      <div class="feats-list">
+        ${character.feats.map(featName => {
+            const feat = window.featsData.find(f => f.name === featName);
+            if (!feat) return '';
+            return `
+            <div class="feat-item">
+              <div class="feat-header" onclick="toggleFeatDetails(this)">
+                <span>${feat.name}</span>
+                <span class="material-icons chevron">expand_more</span>
+              </div>
+              <div class="feat-content">
+                <p><strong>Applies to:</strong> ${feat.appliesTo}</p>
+                <p><strong>Level:</strong> ${feat.level}</p>
+                <p>${feat.description}</p>
+              </div>
             </div>
-            <div class="skills" style="display: none;">
-                <div class="skills-container">
-                    ${skillsHtml}
-                </div>
-            </div>
-            <div class="inventory" style="display: none;">
-                <h3>Weapons</h3>
-                <div class="weapons-list inventory-grid"></div>
-                <h3>Armor</h3>
-                <div class="armor-list inventory-grid"></div>
-                <h3>Other Items</h3>
-                <div class="items-list inventory-grid"></div>
-            </div>
-            <div class="spells" style="display: none;">
-                ${renderSpellsSection(character)}
-            </div>
-            <div class="feats" style="display: none;">
-                ${featEffectsHtml}
-                <h3>Feats List</h3>
-                <div class="feats-list">
-                    ${(character.feats || []).map(featName => {
-                        const feat = window.featsData.find(f => f.name === featName);
-                        if (!feat) return '';
-                        return `
-                            <div class="feat-item">
-                                <div class="feat-header" onclick="toggleFeatDetails(this)">
-                                    <span>${feat.name}</span>
-                                    <span class="material-icons chevron">expand_more</span>
-                                </div>
-                                <div class="feat-content">
-                                    <p><strong>Applies to:</strong> ${feat.appliesTo}</p>
-                                    <p><strong>Level:</strong> ${feat.level}</p>
-                                    <p>${feat.description}</p>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-            <div class="other" style="display: none;">
-                ${otherInfoHtml}
-            </div>
-        `;
-    
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
         const logBox = document.createElement('div');
         logBox.className = 'log-box';
         card.appendChild(logBox);
-    
+
         document.getElementById('characterStack').appendChild(card);
         characterCards.push(card);
         updateCardPositions();
         updateInventoryDisplay(card, character);
-    
+
         card.addEventListener('click', (event) => {
             if (!event.target.closest('.close-button')) {
                 activateCard(card);
             }
         });
-    
+
         console.log("Character feats:", character.feats);
         console.log("Feats data:", window.featsData);
-    
+
+
         setTimeout(() => {
             if (character.backgroundImage && character.backgroundImage !== initialBackgroundImage) {
-                console.log(`Updating background image to: ${character.backgroundImage}`);
                 card.style.backgroundImage = `url(${character.backgroundImage})`;
-            } else {
-                console.log('No update to background image necessary');
             }
         }, 100);
     
         return card;
+
     }
-    
-    function stringifyTraitValue(value) {
-        if (typeof value === 'object' && value !== null) {
-            if (Array.isArray(value)) {
-                return value.map(stringifyTraitValue).join(', ');
-            } else {
-                return Object.entries(value).map(([key, val]) => {
-                    const formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
-                    return `${formattedKey}: ${stringifyTraitValue(val)}`;
-                }).join(', ');
-            }
+
+    function renderFeatsSection(character) {
+        if (!character.feats || character.feats.length === 0) {
+            return '<p>This character has no feats.</p>';
         }
-        return value.toString();
+
+        return `
+    <div class="feats-list">
+      ${character.feats.map(featName => {
+            const feat = window.featsData.find(f => f.name === featName);
+            if (!feat) return '';
+            return `
+          <div class="feat-item">
+            <div class="feat-header" onclick="toggleFeatDetails(this)">
+              <span>${feat.name}</span>
+              <span class="material-icons chevron">expand_more</span>
+            </div>
+            <div class="feat-content">
+              <p><strong>Applies to:</strong> ${feat.appliesTo}</p>
+              <p><strong>Level:</strong> ${feat.level}</p>
+              <p>${feat.description}</p>
+            </div>
+          </div>
+        `;
+        }).join('')}
+    </div>
+  `;
     }
 
     // 4. Keep the toggleFeatDetails function as is
@@ -1339,8 +1186,8 @@ function renderSpellsSection(character) {
         const card = button.closest('.character-card');
         card.querySelectorAll('.view-buttons button').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-    
-        const sections = card.querySelectorAll('.attributes, .skills, .inventory, .spells, .feats, .other');
+
+        const sections = card.querySelectorAll('.attributes, .skills, .inventory, .spells, .feats');
         sections.forEach(section => {
             if (section.classList.contains(view)) {
                 section.style.display = view === 'attributes' || view === 'skills' ? 'flex' : 'block';
@@ -1460,89 +1307,42 @@ function renderSpellsSection(character) {
 
     document.getElementById('loadPremadeButton').addEventListener('click', loadPremadeCharacters);
 
-    // async function loadPremadeCharacters() {
-    //     if (premadeCharactersLoaded) {
-    //         showNotification("Premade characters have already been loaded.");
-    //         return;
-    //     }
-
-    //     const button = document.getElementById('loadPremadeButton');
-    //     button.disabled = true;
-    //     button.textContent = 'Loading...';
-
-    //     try {
-    //         const premadeCharacters = [
-    //             'Bree.json',
-    //             'Cade.json',
-    //             'Deva.json',
-    //             'Jasper.json',
-    //             'Jovah.json',
-    //             'Lark.json',
-    //             'Gregory.json'
-    //         ];
-
-    //         const characters = await Promise.all(premadeCharacters.map(async (file) => {
-    //             const response = await fetch(`premade/${file}`);
-    //             return response.json();
-    //         }));
-
-    //         let loadedCount = 0;
-    //         characters.forEach(character => {
-    //             if (!characterExistsInLocalStorage(character.name)) {
-    //                 character = recalculateCharacterAC(character); // Add this line
-    //                 saveCharacterToLocalStorage(character);
-    //                 renderCharacterCard(character);
-    //                 loadedCount++;
-    //             }
-    //         });
-
-    //         showNotification(`Loaded ${loadedCount} new premade characters.`);
-    //         premadeCharactersLoaded = true;
-    //         button.textContent = 'Premade Characters Loaded';
-    //     } catch (error) {
-    //         console.error('Error loading premade characters:', error);
-    //         showNotification('Failed to load premade characters.');
-    //         button.disabled = false;
-    //         button.textContent = 'Load Premade Characters';
-    //     }
-    // }
-
     async function loadPremadeCharacters() {
         if (premadeCharactersLoaded) {
             showNotification("Premade characters have already been loaded.");
             return;
         }
-    
+
         const button = document.getElementById('loadPremadeButton');
         button.disabled = true;
         button.textContent = 'Loading...';
-    
+
         try {
             const premadeCharacters = [
-                'Bree.json', 'Cade.json', 'Deva.json', 'Jasper.json', 'Jovah.json', 'Lark.json', 'Gregory.json'
+                'Bree.json',
+                'Cade.json',
+                'Deva.json',
+                'Jasper.json',
+                'Jovah.json',
+                'Lark.json',
+                'Gregory.json'
             ];
-    
+
             const characters = await Promise.all(premadeCharacters.map(async (file) => {
                 const response = await fetch(`premade/${file}`);
                 return response.json();
             }));
-    
+
             let loadedCount = 0;
             characters.forEach(character => {
                 if (!characterExistsInLocalStorage(character.name)) {
-                    // Handle potential version differences
-                    character.languages = character.languages || [];
-                    character.racialAbilities = character.racialAbilities || [];
-                    character.feats = character.feats || [];
-                    character.subclass = character.subclass || '';
-    
-                    character = recalculateCharacterAC(character);
+                    character = recalculateCharacterAC(character); // Add this line
                     saveCharacterToLocalStorage(character);
                     renderCharacterCard(character);
                     loadedCount++;
                 }
             });
-    
+
             showNotification(`Loaded ${loadedCount} new premade characters.`);
             premadeCharactersLoaded = true;
             button.textContent = 'Premade Characters Loaded';
@@ -2512,55 +2312,27 @@ function renderSpellsSection(character) {
   `;
     }
 
-    // async function loadItemData() {
-    //     try {
-    //         const [items, weapons, armor, feats] = await Promise.all([
-    //             fetch('items.json').then(response => response.json()),
-    //             fetch('weapons.json').then(response => response.json()),
-    //             fetch('armor.json').then(response => response.json()),
-    //             fetch('feats.json').then(response => response.json())
-    //         ]);
-    //         itemsData = items;
-    //         weaponsData = weapons;
-    //         armorData = armor;
-    //         window.featsData = feats;
-    //     } catch (error) {
-    //         console.error('Error loading item data:', error);
-    //     }
-    // }
-
-    // // Load characters from local storage and spells data when the page loads
-    // window.addEventListener('load', async () => {
-    //     await loadItemData();
-    //     await loadSpellsData();
-    //     loadCharactersFromLocalStorage();
-    // });
     async function loadItemData() {
         try {
-            const [items, weapons, armor, feats, races, spells] = await Promise.all([
+            const [items, weapons, armor, feats] = await Promise.all([
                 fetch('items.json').then(response => response.json()),
                 fetch('weapons.json').then(response => response.json()),
                 fetch('armor.json').then(response => response.json()),
-                fetch('feats.json').then(response => response.json()),
-                fetch('races2.json').then(response => response.json()),
-                fetch('spells.json').then(response => response.json())
+                fetch('feats.json').then(response => response.json())
             ]);
             itemsData = items;
             weaponsData = weapons;
             armorData = armor;
             window.featsData = feats;
-            racesData = races; // Store the races data
-            spellsData = spells;
-            
-            console.log('All data loaded successfully');
         } catch (error) {
-            console.error('Error loading data:', error);
+            console.error('Error loading item data:', error);
         }
     }
-    
-    // Load characters from local storage and all other data when the page loads
+
+    // Load characters from local storage and spells data when the page loads
     window.addEventListener('load', async () => {
-        await loadItemData(); // This now includes loading races and spells data
+        await loadItemData();
+        await loadSpellsData();
         loadCharactersFromLocalStorage();
     });
 

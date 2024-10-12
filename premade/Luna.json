@@ -1,0 +1,299 @@
+{
+  "version": "3",
+  "name": "Luna",
+  "race": "Kender",
+  "class": "Druid",
+  "subclass": "Circle of the Moon",
+  "level": 5,
+  "background": "",
+  "experiencePoints": 0,
+  "abilityScores": {
+    "strength": 15,
+    "dexterity": 20,
+    "constitution": 12,
+    "intelligence": 17,
+    "wisdom": 16,
+    "charisma": 17
+  },
+  "skills": {
+    "acrobatics": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "animalHandling": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "arcana": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "athletics": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "deception": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "history": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "insight": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "intimidation": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "investigation": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "medicine": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "nature": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "perception": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "performance": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "persuasion": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "religion": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "sleightOfHand": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "stealth": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "survival": {
+      "proficient": false,
+      "bonus": 3
+    },
+    "Acrobatics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Animal Handling": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Arcana": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Athletics": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Deception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "History": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Insight": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Intimidation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Investigation": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Medicine": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Nature": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Perception": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Performance": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Persuasion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Religion": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Sleight of Hand": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Stealth": {
+      "proficient": false,
+      "bonus": 0
+    },
+    "Survival": {
+      "proficient": false,
+      "bonus": 0
+    }
+  },
+  "proficiencyBonus": 3,
+  "hp": 33,
+  "maxHp": 33,
+  "ac": 15,
+  "initiative": 5,
+  "speed": 30,
+  "hitDie": {
+    "number": 5,
+    "faces": 8
+  },
+  "maxHitDice": 5,
+  "currentHitDice": 5,
+  "savingThrows": {
+    "strength": {
+      "proficient": false,
+      "value": 2
+    },
+    "dexterity": {
+      "proficient": false,
+      "value": 5
+    },
+    "constitution": {
+      "proficient": false,
+      "value": 1
+    },
+    "intelligence": {
+      "proficient": false,
+      "value": 3
+    },
+    "wisdom": {
+      "proficient": false,
+      "value": 3
+    },
+    "charisma": {
+      "proficient": false,
+      "value": 3
+    }
+  },
+  "languages": [],
+  "features": [],
+  "traits": {},
+  "inventory": [
+    {
+      "name": "Scimitar",
+      "weight": "3 lb."
+    },
+    {
+      "name": "Studded leather",
+      "weight": "13 lb."
+    },
+    {
+      "name": "Backpack",
+      "weight": "5 lb."
+    },
+    {
+      "name": "Bedroll",
+      "weight": "7 lb."
+    },
+    {
+      "name": "Mess kit",
+      "weight": "1 lb."
+    },
+    {
+      "name": "Tinderbox",
+      "weight": "1 lb."
+    },
+    {
+      "name": "Torch",
+      "weight": "1 lb."
+    },
+    {
+      "name": "Rations",
+      "weight": "2 lb."
+    }
+  ],
+  "spellcasting": {
+    "class": "",
+    "ability": "wis",
+    "spellSaveDC": null,
+    "spellAttackBonus": null,
+    "spells": [
+      "Druidcraft",
+      "Frostbite",
+      "Guidance",
+      "Magic Stone",
+      "Animal Friendship",
+      "Charm Person",
+      "Shillelagh",
+      "Cure Wounds",
+      "Ice Knife",
+      "Goodberry",
+      "Animal Messenger",
+      "Augury",
+      "Barkskin",
+      "Flaming Sphere",
+      "Healing Spirit",
+      "Call Lightning",
+      "Daylight",
+      "Elemental Weapon",
+      "Speak with Plants"
+    ],
+    "spellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    },
+    "currentSpellSlots": {
+      "1": 4,
+      "2": 3,
+      "3": 2,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0
+    }
+  },
+  "currency": {
+    "copper": 25,
+    "silver": 0,
+    "electrum": 0,
+    "gold": 0,
+    "platinum": 0,
+    "gems": ""
+  },
+  "notes": "",
+  "feats": [],
+  "abilityScoreImprovementsLeft": 0
+}

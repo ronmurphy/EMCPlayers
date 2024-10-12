@@ -1519,7 +1519,7 @@ function renderSpellsSection(character) {
     
         try {
             const premadeCharacters = [
-                'Bree.json', 'Cade.json', 'Deva.json', 'Jasper.json', 'Jovah.json', 'Lark.json', 'Gregory.json'
+                'Bree.json', 'Cade.json', 'Deva.json', 'Jasper.json', 'Jovah.json', 'Lark.json', 'Gregory.json', 'Luna.json'
             ];
     
             const characters = await Promise.all(premadeCharacters.map(async (file) => {
